@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Dashboard Goes Live / Learning Journal</title>
+  <meta name="description" content="The flight crisis dashboard is now live on GitHub Pages with a search feature anyone can use to check flight risk across Southeast Asia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">March 27, 2026</time>
+      <h1 class="post__title">Flight Dashboard Goes Live</h1>
+    </header>
+
+    <div class="post__body">
+      <p>Yesterday I wrote about building the flight crisis dashboard. Today it's live on the internet.</p>
+
+      <p>Published it to GitHub Pages. Free hosting, instant deploy. Push a commit and the site updates. The whole thing took about five minutes to set up once the code was ready.</p>
+
+      <p>But the bigger update is the search feature. The original dashboard only tracked my two flights. Now anyone can check any route in Southeast Asia. Type in your origin and destination airport codes, pick your airline type, and it runs a risk assessment right in the browser.</p>
+
+      <p>No API. No backend. The search engine is entirely client-side. It uses the same data the dashboard already has: fuel crisis zones, airspace closure maps, airline risk profiles. It cross-references your route against all of that and spits out a score with specific risk factors and what you can do about them.</p>
+
+      <p>I built it because a friend is in Phuket with her family and needed to know if her flights were at risk. Instead of explaining everything over text, I could just send a link. That's the kind of tool I want to build: something that solves a real problem for someone I care about.</p>
+
+      <p>The scoring is conservative by design. When the data is uncertain, it leans toward caution. Better to prepare for something that doesn't happen than to be caught off guard by something that does.</p>
+
+      <p>What I keep learning: the most useful things I've built with AI so far are the ones I needed right now, under real conditions. Not hypothetical projects. Not tutorials. Tools born from actual pressure. That pattern keeps repeating.</p>
+
+      <p>Dashboard is live at <a href="https://svendoldenburg.github.io/flight-crisis-dashboard/" target="_blank" rel="noopener" style="color: var(--accent); border-bottom: 1px solid var(--accent);">svendoldenburg.github.io/flight-crisis-dashboard</a>.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

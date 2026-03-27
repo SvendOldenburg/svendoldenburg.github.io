@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building a Flight Crisis Dashboard / Learning Journal</title>
+  <meta name="description" content="Built a dashboard to monitor flight disruptions across Southeast Asia as geopolitical chaos threatens my travel plans.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">March 26, 2026</time>
+      <h1 class="post__title">Building a Flight Crisis Dashboard</h1>
+    </header>
+
+    <div class="post__body">
+      <p>Today we built something new. A dashboard that monitors flight disruptions across Southeast Asia.</p>
+
+      <p>I'm in Vietnam right now, at a smaller regional airport in Nha Trang. The original plan: fly to Bangkok mid-April, then Bangkok to Copenhagen end of April. But the situation in the Middle East has changed the calculus. The bombings of Iran, the blockade of the Strait of Hormuz. Flight prices are climbing and routes are getting cancelled.</p>
+
+      <p>Vietnam gets 60% of its jet fuel from China and Thailand. Both countries have stopped exports. That's not a comfortable position to be in when you're not sitting at a major hub airport, and my Vietnam visa only runs so long.</p>
+
+      <p>I needed a tool to monitor what's going on so I can change flights on short notice if I have to. There's an uneasy feeling in my stomach that I might need to leave Vietnam sooner than planned.</p>
+
+      <p>So we built the tool. A search-powered dashboard that pulls live flight disruption data. The setup: hit refresh, it sends a request to Claude, Claude does all the searching and rebuilds the dashboard with current results. It's only built for my own use, but the concept was cool.</p>
+
+      <p>The main challenge was figuring out where the data lived relative to the model powering the dashboard. Once that clicked, the whole thing came together.</p>
+
+      <p>And honestly? It was so fun to build. There's something about building a tool you actually need, right now, under real pressure. That hits different.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Svend Oldenburg</title>
+  <meta name="description" content="Writer, builder, work in progress. Building a life on my own terms.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav" id="nav">
+    <a href="#hero" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="journal/index.html">Journal</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="journal/index.html">Journal</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__content">
+      <p class="section-label hero__label reveal" style="--delay: 0.1s">001 / About</p>
+      <h1 class="hero__name reveal" style="--delay: 0.3s">Svend<br>Oldenburg</h1>
+      <p class="hero__tagline reveal" style="--delay: 0.55s">Building a life on my own terms.</p>
+      <p class="hero__intro reveal" style="--delay: 0.75s">
+        I left my career to build something of my own.
+        An AI playground. A newsletter. Some secret stuff.
+        A life that actually feels like mine.
+        This is where I share the work.
+      </p>
+    </div>
+    <div class="hero__scroll reveal" style="--delay: 1.1s">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects" id="projects">
+    <p class="section-label reveal">002 / Projects</p>
+
+    <a href="https://svendoldenburg.github.io/flight-crisis-dashboard/" class="project reveal" target="_blank" rel="noopener">
+      <div class="project__info">
+        <h2 class="project__name">Flight Crisis Dashboard</h2>
+        <p class="project__desc">Live flight risk monitor for Southeast Asia. Tracks fuel shortages, airspace closures, and airline disruptions during the Iran conflict.</p>
+        <div class="project__preview" aria-hidden="true">
+          <div class="preview-bar">
+            <span class="preview-dot preview-dot--red"></span>
+            <span class="preview-dot preview-dot--yellow"></span>
+            <span class="preview-dot preview-dot--green"></span>
+            <span class="preview-label">ELEVATED 5.2/10</span>
+          </div>
+          <div class="preview-body">
+            <div class="preview-line preview-line--wide"></div>
+            <div class="preview-line preview-line--med"></div>
+            <div class="preview-cols">
+              <div class="preview-col"></div>
+              <div class="preview-col"></div>
+            </div>
+          </div>
+        </div>
+        <span class="project__tag">Live</span>
+      </div>
+      <span class="project__arrow">&rarr;</span>
+    </a>
+
+    <a href="https://svendoldenburg.substack.com/" class="project reveal" target="_blank" rel="noopener">
+      <div class="project__info">
+        <h2 class="project__name">The Unlearning Letters</h2>
+        <p class="project__desc">A newsletter about burning it all down and finding what's real.</p>
+      </div>
+      <span class="project__arrow">&rarr;</span>
+    </a>
+
+    <a href="journal/index.html" class="project reveal">
+      <div class="project__info">
+        <h2 class="project__name">Building with AI</h2>
+        <p class="project__desc">Learning to build with artificial intelligence. Documenting the process as it happens.</p>
+      </div>
+      <span class="project__arrow">&rarr;</span>
+    </a>
+  </section>
+
+  <!-- WRITING -->
+  <section class="writing" id="writing">
+    <p class="section-label reveal">003 / Writing</p>
+    <p class="writing__subtitle reveal">Featured from The Unlearning Letters</p>
+
+    <div class="writing__grid">
+      <a href="https://svendoldenburg.substack.com/p/on-contemplation-of-death-part-1" class="article article--featured reveal" target="_blank" rel="noopener">
+        <span class="article__tag">Latest</span>
+        <h3 class="article__title">On Contemplation of Death, Part 1</h3>
+        <p class="article__excerpt">A story about a coin, a funeral, and when everything shifted.</p>
+        <span class="article__link">Read on Substack &rarr;</span>
+      </a>
+
+      <a href="https://svendoldenburg.substack.com/p/the-corruption-of-the-logos" class="article reveal" target="_blank" rel="noopener">
+        <h3 class="article__title">The Corruption of the Logos</h3>
+        <p class="article__excerpt">On words, meaning, and what happens when the language we use stops telling the truth.</p>
+        <span class="article__link">Read &rarr;</span>
+      </a>
+
+      <a href="https://svendoldenburg.substack.com/p/i-just-got-scammed-and-i-cant-stop" class="article reveal" target="_blank" rel="noopener">
+        <h3 class="article__title">I Just Got Scammed, and I Can't Stop Smiling</h3>
+        <p class="article__excerpt">Sometimes the lesson finds you in the last place you'd expect.</p>
+        <span class="article__link">Read &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONNECT -->
+  <section class="connect" id="connect">
+    <p class="section-label reveal">004 / Connect</p>
+    <h2 class="connect__heading reveal">Let's talk.</h2>
+    <div class="connect__links reveal">
+      <a href="mailto:svendoldenburg@gmail.com" class="connect__link">Email</a>
+      <a href="https://svendoldenburg.substack.com/" class="connect__link" target="_blank" rel="noopener">Substack</a>
+      <a href="https://www.linkedin.com/in/svendoldenburg/" class="connect__link" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

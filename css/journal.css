@@ -1,0 +1,238 @@
+/* ============================================
+   JOURNAL — Index + Post styles
+   ============================================ */
+
+/* ========================
+   NAV ACTIVE STATE
+   ======================== */
+.nav__active {
+  color: var(--text-primary) !important;
+}
+
+.nav__active::after {
+  width: 100% !important;
+}
+
+/* ========================
+   JOURNAL INDEX
+   ======================== */
+.journal {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: calc(5rem + var(--space-xl)) var(--page-margin) var(--space-2xl);
+}
+
+.journal__header {
+  margin-bottom: var(--space-xl);
+}
+
+.journal__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: var(--space-sm);
+}
+
+.journal__desc {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.journal__list {
+  list-style: none;
+}
+
+.journal__entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--rule);
+  transition: border-color 0.3s ease;
+}
+
+.journal__list li:first-child .journal__entry {
+  border-top: 1px solid var(--rule);
+}
+
+.journal__entry:hover {
+  border-color: var(--accent);
+}
+
+.journal__entry-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 300;
+  transition: color 0.3s ease;
+}
+
+.journal__entry:hover .journal__entry-title {
+  color: var(--accent);
+}
+
+.journal__entry-date {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ========================
+   POST (individual entry)
+   ======================== */
+.post {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: calc(5rem + var(--space-xl)) var(--page-margin) var(--space-2xl);
+}
+
+.post__header {
+  margin-bottom: var(--space-xl);
+}
+
+.post__back {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: var(--space-lg);
+  transition: color 0.3s ease;
+}
+
+.post__back:hover {
+  color: var(--accent);
+}
+
+.post__date {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: var(--space-sm);
+}
+
+.post__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* ========================
+   POST BODY — prose styles
+   ======================== */
+.post__body {
+  font-size: clamp(1rem, 1.3vw, 1.08rem);
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+
+.post__body p {
+  margin-bottom: 1.6em;
+}
+
+.post__body h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  font-weight: 300;
+  line-height: 1.3;
+  margin-top: 2.5em;
+  margin-bottom: 0.8em;
+}
+
+.post__body h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+
+.post__body a {
+  color: var(--accent);
+  border-bottom: 1px solid rgba(196, 149, 106, 0.3);
+  transition: border-color 0.3s ease;
+}
+
+.post__body a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.post__body blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: var(--space-md);
+  margin: 2em 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.post__body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.post__body pre {
+  background: var(--bg-mid);
+  border: 1px solid var(--rule);
+  padding: var(--space-md);
+  margin: 2em 0;
+  overflow-x: auto;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  border-radius: 2px;
+}
+
+.post__body code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.88em;
+}
+
+.post__body p code {
+  background: var(--bg-mid);
+  padding: 0.15em 0.4em;
+  border-radius: 2px;
+}
+
+.post__body ul,
+.post__body ol {
+  margin-bottom: 1.6em;
+  padding-left: 1.5em;
+}
+
+.post__body li {
+  margin-bottom: 0.5em;
+}
+
+.post__body img {
+  margin: 2em 0;
+  border-radius: 2px;
+}
+
+.post__body hr {
+  border: none;
+  height: 1px;
+  background: var(--rule);
+  margin: 3em 0;
+}
+
+/* ========================
+   RESPONSIVE
+   ======================== */
+@media (max-width: 768px) {
+  .journal__entry {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+}
