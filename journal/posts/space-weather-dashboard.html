@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space weather is more important than I thought / Learning Journal</title>
+  <meta name="description" content="Space weather used to be background noise to me. That changed after I started noticing patterns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">April 03, 2026</time>
+      <h1 class="post__title">Space weather is more important than I thought</h1>
+    </header>
+
+    <div class="post__body">
+      <p>Space weather used to be background noise to me. Something astronomers cared about. Not something with any real relevance to daily life.</p>
+
+      <p>That changed after I started noticing patterns -- days where I felt off, foggy, or wired for no apparent reason that turned out to line up with solar activity. Headaches that didn't make sense. Energy dips. A general sense of the world feeling slightly wrong. Once I started paying attention, I couldn't stop seeing it.</p>
+
+      <p>So building a space weather dashboard felt like an obvious next step.</p>
+
+      <p>The data is out there, but it's spread across multiple sources -- NOAA, NASA, various monitoring agencies -- and none of it is written for people who aren't already fluent in the terminology. Kp index, solar flux, geomagnetic storm classifications. It means something, but you have to go digging to understand what.</p>
+
+      <p>The dashboard pulls the important data points into one place and adds plain-language explanations for each one. The goal is to make it usable for people who want to understand what's happening without needing a background in space physics.</p>
+
+      <p>I also built in a personal log -- a private feature where I can record my own experiences alongside the data. Energy levels, headaches, sleep quality, mood. Over time, that log should tell me something real about how space weather is affecting me specifically.</p>
+
+      <p>Early days still. But this is exactly the kind of build I want more of: something I actually use, built around data that matters.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
