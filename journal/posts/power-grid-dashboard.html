@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building the Power Grid Dashboard / Learning Journal</title>
+  <meta name="description" content="Are power grids actually at risk, or is the media running with crisis headlines? I built a dashboard to find out.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">April 10, 2026</time>
+      <h1 class="post__title">Building the Power Grid Dashboard</h1>
+    </header>
+
+    <div class="post__body">
+      <p>The Hormuz Strait crisis, oil price spike and rumors of an increase in power blackouts got me wondering: Are power grids actually at risk, or is the media just running with "crisis" headlines? I wanted to find out for myself, so I built yet another dashboard.</p>
+
+      <p>The Global Power Grid Dashboard pulls open data going back to 2000 and runs a linear regression to show whether outages are actually increasing over time. Spoiler: they are, and the trend is accelerating. But the reasons are more nuanced than "oil bad."</p>
+
+      <p>The build has a few things I hadn't done before, and I do love leaning on Claude in these situations:</p>
+
+      <h2>Statistical projection from raw data</h2>
+
+      <p>The dashboard runs a simple linear regression on 26 years of outage data and plots a trend line with confidence bands. If the current year's annualized pace exceeds the band, something structural might be changing. Writing the projection model from scratch instead of using a library forced me to actually understand the math.</p>
+
+      <h2>Multi-metric chart toggling</h2>
+
+      <p>One chart, three views: event count, customers affected, MW lost. Each tells a different story. Event count shows frequency is climbing. Customers affected shows the damage is spikier. MW lost shows the scale of cascading failures.</p>
+
+      <h2>Cause-shift analysis</h2>
+
+      <p>Side-by-side doughnut charts comparing 2000-2012 vs 2013-present. Weather-related outages have roughly tripled. Cyber incidents went from zero to double digits. Equipment failures are steady. Demand-driven outages are flat. The grid isn't failing because of one thing. The threat mix is shifting.</p>
+
+      <h2>Regional grid cards with honest data-quality flags</h2>
+
+      <p>Every region gets a card, but most of the world has terrible open grid data. I marked cards with "Limited Data" or "No Open Data" instead of pretending the numbers are reliable. Only North America and Europe have real transparency.</p>
+
+      <h2>Oil price overlay</h2>
+
+      <p>Brent crude charted alongside grid events, with key crisis dates annotated. The insight the dashboard surfaces: oil crises are economic crises for OECD nations, not blackout crises. The actual blackout impact lands on countries that were already fuel-import-fragile like Bangladesh, Pakistan, Ghana.</p>
+
+      <h2>EIA live data integration</h2>
+
+      <p>The dashboard can pull real-time US generation and demand data from the EIA Open Data API. This was the first time Claude and I worked with their API. Clean data, good documentation.</p>
+
+      <h2>The look</h2>
+
+      <p>The visual style is warm amber on dark, kind of a control room aesthetic with film grain and scanline overlays. IBM Plex Sans for readability, JetBrains Mono for data. It works well for a data-heavy page without feeling clinical.</p>
+
+      <h2>Biggest learning</h2>
+
+      <p>The gap between "the news says X is a crisis" and "the data says Y is actually happening" is massive. Building the dashboard didn't just surface information. It changed how I read the headlines. I'm not done looking into this!</p>
+
+      <p>Live at <a href="https://svendoldenburg.github.io/power-grid-dashboard/" target="_blank" rel="noopener">svendoldenburg.github.io/power-grid-dashboard</a>.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
