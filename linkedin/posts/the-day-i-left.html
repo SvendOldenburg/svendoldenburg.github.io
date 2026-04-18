@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>August 2025. I handed in my laptop, walked out the door, and didn't look back / Digital Business + AI</title>
+  <meta name="description" content="I left my job in August 2025 with no plan. What happened next is something I'm only now ready to talk about.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+  <link rel="stylesheet" href="../../css/linkedin.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../../journal/index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing" class="nav__active">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../../journal/index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post li-post">
+
+    <header class="post__header">
+      <a href="../index.html" class="post__back reveal" style="--delay: 0.1s">&larr; Back to writing</a>
+      <div class="li-post__meta reveal" style="--delay: 0.2s">
+        <time class="post__date">April 18, 2026</time>
+        <span class="li-status li-status--ready">READY</span>
+      </div>
+      <h1 class="post__title reveal" style="--delay: 0.35s">August 2025. I handed in my laptop, walked out the door, and didn't look back</h1>
+    </header>
+
+    <div class="post__body li-post__body reveal" id="liContent" style="--delay: 0.5s">
+
+      <p class="li-hook">August 2025. I handed in my laptop, walked out the door, and didn't look back.<br>What happened next is something I'm only now ready to talk about.</p>
+
+      <p>I didn't have another job lined up.</p>
+
+      <p>No plan B. No clients waiting. No business already running.</p>
+
+      <p>Just a quiet decision that it was time to go, and enough runway to find out what that actually meant.</p>
+
+      <p>The week before I left, three different people asked me the same thing: "But what are you going to do?"</p>
+
+      <p>I didn't have an answer. That was the point.</p>
+
+      <p>What followed surprised me. In ways I didn't see coming.</p>
+
+      <p>I'm not going to lay it all out today. That's what the next few posts are for. But I'll say this: the version of me writing this is not the same person who cleared that desk.</p>
+
+      <p>A lot happened. Some of it I chose. Most of it chose me.</p>
+
+      <p>If you've ever stood at that edge, where you can see the old chapter clearly but the new one is still just a feeling, you know what I mean.</p>
+
+      <p>The thing I keep coming back to:</p>
+
+      <p>You don't need to know what you're walking into. You just need to be honest that it's time to walk.</p>
+
+      <p>Has anyone else made a jump like this? What made you pull the trigger?</p>
+
+    </div>
+
+    <div class="li-counter reveal" style="--delay: 0.65s">
+      <span id="charCount">0</span> / 3000 chars
+      <span class="li-counter__hint" id="counterHint"></span>
+    </div>
+
+    <div class="li-preview-strip reveal" style="--delay: 0.75s">
+      <span class="li-preview-label">Preview width</span>
+      <div class="li-preview-frame" id="previewFrame">
+        <div class="li-preview-profile">
+          <div class="li-preview-avatar"></div>
+          <div class="li-preview-name-block">
+            <span class="li-preview-name">Svend Oldenburg</span>
+            <span class="li-preview-tagline">Building something on my own terms</span>
+          </div>
+        </div>
+        <div class="li-preview-content" id="previewContent"></div>
+      </div>
+    </div>
+
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script>
+    // Character counter + preview sync
+    const content = document.getElementById('liContent');
+    const charCount = document.getElementById('charCount');
+    const counterHint = document.getElementById('counterHint');
+    const previewContent = document.getElementById('previewContent');
+
+    function updateCounter() {
+      const text = content.innerText || content.textContent || '';
+      const count = text.trim().length;
+      charCount.textContent = count;
+
+      charCount.className = '';
+      if (count < 150) {
+        counterHint.textContent = 'Too short for feed';
+        charCount.classList.add('li-count--low');
+      } else if (count <= 1300) {
+        counterHint.textContent = 'Good length';
+        charCount.classList.add('li-count--good');
+      } else if (count <= 3000) {
+        counterHint.textContent = 'Long -- make sure it earns it';
+        charCount.classList.add('li-count--long');
+      } else {
+        counterHint.textContent = 'Over limit';
+        charCount.classList.add('li-count--over');
+      }
+
+      // Mirror content to preview
+      previewContent.innerHTML = content.innerHTML;
+    }
+
+    updateCounter();
+    const observer = new MutationObserver(updateCounter);
+    observer.observe(content, { childList: true, subtree: true, characterData: true });
+  </script>
+</body>
+</html>
