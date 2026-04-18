@@ -1,0 +1,202 @@
+/* ============================================
+   LINKEDIN PRACTICE — Index + Post styles
+   ============================================ */
+
+/* ========================
+   STATUS BADGES
+   ======================== */
+.li-entry-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.li-status {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2em 0.6em;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.li-status--draft {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-dim);
+  border: 1px solid var(--rule);
+}
+
+.li-status--ready {
+  background: rgba(196, 149, 106, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(196, 149, 106, 0.3);
+}
+
+.li-status--posted {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid var(--rule);
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* ========================
+   EMPTY STATE
+   ======================== */
+.li-empty-state {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  font-weight: 300;
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--rule);
+}
+
+.li-empty-state a {
+  color: var(--accent);
+  transition: opacity 0.2s ease;
+}
+
+.li-empty-state a:hover {
+  opacity: 0.7;
+}
+
+/* ========================
+   POST PAGE
+   ======================== */
+.li-post__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.li-post__meta .post__date {
+  margin-bottom: 0;
+}
+
+/* ========================
+   HOOK PARAGRAPH
+   ======================== */
+.li-hook {
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  border-left: 2px solid var(--accent);
+  padding-left: var(--space-md);
+  margin-left: calc(-1 * var(--space-md) - 2px);
+}
+
+/* ========================
+   CHARACTER COUNTER
+   ======================== */
+.li-counter {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--rule);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+#charCount {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.li-count--low    { color: var(--text-dim); }
+.li-count--good   { color: #7aaa7a; }
+.li-count--long   { color: var(--accent); }
+.li-count--over   { color: #c47a7a; }
+
+.li-counter__hint {
+  margin-left: var(--space-sm);
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ========================
+   PREVIEW FRAME
+   ======================== */
+.li-preview-strip {
+  margin-top: var(--space-xl);
+}
+
+.li-preview-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: var(--space-md);
+}
+
+.li-preview-frame {
+  max-width: 552px;
+  background: #1b1f23;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: var(--space-md) var(--space-lg);
+}
+
+.li-preview-profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.li-preview-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--rule);
+  flex-shrink: 0;
+}
+
+.li-preview-name-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.li-preview-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.li-preview-tagline {
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: var(--text-dim);
+}
+
+.li-preview-content {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.li-preview-content p {
+  margin-bottom: 0.8em;
+}
+
+.li-preview-content p:last-child {
+  margin-bottom: 0;
+}
+
+.li-preview-content .li-hook {
+  font-size: 0.9rem;
+  border-left: none;
+  padding-left: 0;
+  margin-left: 0;
+  font-weight: 400;
+  color: var(--text-primary);
+}
