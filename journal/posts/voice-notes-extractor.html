@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building a voice notes extractor from scratch / Learning Journal</title>
+  <meta name="description" content="477 voice notes sitting in an app, doing nothing. I built a script to pull them all out.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">April 20, 2026</time>
+      <h1 class="post__title">Building a voice notes extractor from scratch</h1>
+    </header>
+
+    <div class="post__body">
+      <p>I've been using voicenotes.com for about six months -- walking journal, processing thoughts, catching ideas. 477 notes. None of them searchable, synthesizable, or useful as raw material for anything. They just sat there.</p>
+
+      <p>Today I built something to fix that.</p>
+
+      <p>The goal was simple: pull all the transcripts out of voicenotes.com and write them as markdown files to Google Drive. From there I can search them, read through them, eventually find the arc.</p>
+
+      <p>The interesting part was getting the API call right. Voicenotes doesn't publish a proper API spec, so I reverse-engineered the correct call signature from their official open-source Obsidian plugin repo. Once I had the right POST structure, the rest was straightforward -- paginate through all notes, extract transcript and metadata, write markdown files with frontmatter, skip anything already written.</p>
+
+      <p>Ran it. 477 notes extracted, 0 errors.</p>
+
+      <p>The script lives in the project. It's idempotent -- run it any time after recording new notes and it only writes the new ones. Pass <code>--force</code> to reprocess everything if the format changes.</p>
+
+      <p>I also wrapped it in a Claude skill so future syncs are a single command.</p>
+
+      <p>The transcripts are in Google Drive now. Reading through six months of my own walking journal is a different kind of project -- one for later.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
