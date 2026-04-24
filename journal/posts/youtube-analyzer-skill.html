@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building a YouTube Analyzer Skill / Learning Journal</title>
+  <meta name="description" content="I've been saving YouTube links for weeks without watching them. So we built a fix.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">April 24, 2026</time>
+      <h1 class="post__title">Building a YouTube Analyzer Skill</h1>
+    </header>
+
+    <div class="post__body">
+      <p>I've been researching several topics for the last few weeks, especially within the AI building space, and there is an overwhelming amount of content out there. I have the privilege of time right now, but I don't want to spend it all watching YouTube and not taking action. I was saving video links to the Watch Later playlist, and that list just grew and grew. My life is also about to pick up pace soon, so my time is becoming even more valuable.</p>
+
+      <p>So we built a fix.</p>
+
+      <p>The idea was simple: paste a URL, get back a structured digest -- metadata, summary, key takeaways, action steps, notable quotes. No watching required unless I really want to. The analysis runs in Claude's own context, so there's no separate API call. It's just a small Python helper script pulling the transcript and metadata, and Claude doing the analysis.</p>
+
+      <p>The whole thing took under an hour to plan and build, as we kept it simple for now. It just lives within my Kairu project, my personal assistant powered by Claude. It might become a website down the line for the fun of it.</p>
+
+      <p>We hit one fun snag -- a Windows encoding error when the channel description had emoji -- it made me smile, and we fixed it in one line. Then we ran it on four videos back to back. It worked cleanly every time.</p>
+
+      <p>Output lands in a research folder tagged appropriately. The part that still surprises me: a 30-minute video comes back as a tight one-page brief in under a minute and at a reasonable token cost. That's the leverage.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
