@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building a housing budget calculator / Learning Journal</title>
+  <meta name="description" content="Moving back to Copenhagen means finding a place. And finding a place means staring at numbers that don't make sense until you lay them all out.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">May 1, 2026</time>
+      <h1 class="post__title">Building a housing budget calculator</h1>
+    </header>
+
+    <div class="post__body">
+      <p>Moving back to Copenhagen means finding a place. And finding a place means staring at numbers that don't make sense until you lay them all out.</p>
+
+      <p>The core question: furnished apartment with storage container, or unfurnished apartment with my own furniture and no container? They're not directly comparable. Different move-in costs, different monthly costs, different trade-offs depending on how long you stay.</p>
+
+      <p>So I built a calculator.</p>
+
+      <p>It's a single HTML file -- no framework, no backend, no dependencies. Two columns side by side: Option A and Option B. You enter the rent, deposit, prepaid rent, aconto, and boligstøtte for each, toggle whether the container storage cost applies, and the numbers update instantly.</p>
+
+      <p>The move-in cost took a quick correction. My first version added only deposit + prepaid rent. But the real indflytningspris -- the Danish move-in price -- includes first month's rent and first month's aconto on top of that. One screenshot from BoligPortal fixed that.</p>
+
+      <p>The result is a clean comparison: total move-in cost, monthly cost as configured, monthly cost excluding the container, and a callout at the bottom that names the cheaper option and by exactly how much.</p>
+
+      <p>It lives in the Workshop. I'll use it this month.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
