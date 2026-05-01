@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Four months into Southeast Asia, a stranger from Australia asked what I do / Digital Business + AI</title>
+  <meta name="description" content="When the title is gone, you find out how much of your identity was borrowed from it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+  <link rel="stylesheet" href="../../css/linkedin.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../../journal/index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing" class="nav__active">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../../journal/index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post li-post">
+
+    <header class="post__header">
+      <a href="../index.html" class="post__back reveal" style="--delay: 0.1s">&larr; Back to writing</a>
+      <div class="li-post__meta reveal" style="--delay: 0.2s">
+        <time class="post__date">May 1, 2026</time>
+        <span class="li-status li-status--ready">READY</span>
+      </div>
+      <h1 class="post__title reveal" style="--delay: 0.35s">Four months into Southeast Asia, a stranger from Australia asked what I do</h1>
+    </header>
+
+    <div class="post__body li-post__body reveal" id="liContent" style="--delay: 0.5s">
+
+      <p class="li-hook">Four months into Southeast Asia, a stranger from Australia asked what I do, while we were both waiting for our takeaway.<br>I opened my mouth. Nothing coherent came out.</p>
+
+      <p>Not because I was embarrassed.</p>
+
+      <p>Because I genuinely didn't know anymore.</p>
+
+      <p>For years the answer was automatic. A title. A sector. The short elevator speech used at conferences. A sentence that doubled as an identity. Somewhere between Vietnam and Bangkok, that answer stopped being true for real. I hadn't noticed it leaving.</p>
+
+      <p>The strange thing wasn't the void. It was realizing how long I'd been confusing the container for the content.</p>
+
+      <p>I always assumed I'd know what I wanted if I just had the time. Then the calendar cleared. Really cleared. And it turned out most of what I thought I wanted didn't actually interest me. That was useful information.</p>
+
+      <p>So I started paying attention differently. Not asking what I should be building, but noticing what I kept returning to without being told. What I stayed up thinking about. What made an afternoon disappear.</p>
+
+      <p>Turns out: AI, writing, spirituality, understanding why people and systems break down and what it takes to fix them.</p>
+
+      <p>Not from a planning session. From having enough quiet to hear it.</p>
+
+      <p>The skill nobody prepares you for is learning to let that process breathe. To be patient while the real preferences surface. It feels inefficient. It's the most honest work I've done.</p>
+
+      <p>What did you think you'd do with your time, before you actually had it?</p>
+
+    </div>
+
+    <div class="li-counter reveal" style="--delay: 0.65s">
+      <span id="charCount">0</span> / 3000 chars
+      <span class="li-counter__hint" id="counterHint"></span>
+    </div>
+
+    <div class="li-preview-strip reveal" style="--delay: 0.75s">
+      <span class="li-preview-label">Preview width</span>
+      <div class="li-preview-frame" id="previewFrame">
+        <div class="li-preview-profile">
+          <div class="li-preview-avatar"></div>
+          <div class="li-preview-name-block">
+            <span class="li-preview-name">Svend Oldenburg</span>
+            <span class="li-preview-tagline">Building something on my own terms</span>
+          </div>
+        </div>
+        <div class="li-preview-content" id="previewContent"></div>
+      </div>
+    </div>
+
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script>
+    // Character counter + preview sync
+    const content = document.getElementById('liContent');
+    const charCount = document.getElementById('charCount');
+    const counterHint = document.getElementById('counterHint');
+    const previewContent = document.getElementById('previewContent');
+
+    function updateCounter() {
+      const text = content.innerText || content.textContent || '';
+      const count = text.trim().length;
+      charCount.textContent = count;
+
+      charCount.className = '';
+      if (count < 150) {
+        counterHint.textContent = 'Too short for feed';
+        charCount.classList.add('li-count--low');
+      } else if (count <= 1300) {
+        counterHint.textContent = 'Good length';
+        charCount.classList.add('li-count--good');
+      } else if (count <= 3000) {
+        counterHint.textContent = 'Long -- make sure it earns it';
+        charCount.classList.add('li-count--long');
+      } else {
+        counterHint.textContent = 'Over limit';
+        charCount.classList.add('li-count--over');
+      }
+
+      // Mirror content to preview
+      previewContent.innerHTML = content.innerHTML;
+    }
+
+    updateCounter();
+    const observer = new MutationObserver(updateCounter);
+    observer.observe(content, { childList: true, subtree: true, characterData: true });
+  </script>
+</body>
+</html>
