@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Weather Dashboard / Svend Oldenburg</title>
+  <meta name="description" content="Real-time solar wind, geomagnetic storm, earthquake, and Schumann resonance monitoring dashboard built with AI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/journal.css">
+  <link rel="stylesheet" href="../css/builds.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html#projects" class="nav__active">Projects</a></li>
+      <li><a href="../index.html#writing">Writing</a></li>
+      <li><a href="../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#writing">Writing</a></li>
+      <li><a href="../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <main class="journal">
+    <div class="journal__header">
+      <a href="index.html" class="post__back">&larr; All Builds</a>
+      <span class="build-card__tag">Live</span>
+      <h1 class="journal__title">Space Weather Dashboard</h1>
+      <p class="journal__desc">Real-time monitoring of solar wind, geomagnetic storms, solar flares, earthquakes, and Schumann resonance data. Auto-refreshes every 5 minutes from NOAA and USGS feeds.</p>
+    </div>
+
+    <div class="build-screenshot">
+      <!-- Replace with: <img src="../assets/screenshots/space-weather.png" alt="Space Weather Dashboard screenshot"> -->
+      <div class="build-screenshot__placeholder">Screenshot coming</div>
+    </div>
+
+    <div class="build-live-card">
+      <div>
+        <p class="build-live-card__tech">Chart.js / Leaflet.js / NOAA SWPC / USGS</p>
+        <p class="build-live-card__desc">Live dashboard on GitHub Pages. Solar and seismic data refreshes automatically every 5 minutes.</p>
+      </div>
+      <a href="https://svendoldenburg.github.io/space-weather-dashboard/" class="build-live-card__link" target="_blank" rel="noopener">View live &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

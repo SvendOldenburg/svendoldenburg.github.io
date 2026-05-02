@@ -495,6 +495,15 @@ img {
   margin-bottom: var(--space-xl);
 }
 
+.writing__intro {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 36rem;
+  line-height: 1.8;
+  margin-bottom: var(--space-lg);
+}
+
 .writing__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
