@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The training tracker gets a real backend / Learning Journal</title>
+  <meta name="description" content="Expanded the training tracker with five new sections and wired the whole thing to a self-hosted PocketBase backend on my own VPS. Cross-device sync now works.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">May 4, 2026</time>
+      <h1 class="post__title">The training tracker gets a real backend</h1>
+    </header>
+
+    <div class="post__body">
+      <p>The training tracker started as a browser-only PWA. Data lived in IndexedDB -- local, fast, and completely stuck on whatever device you logged it from. Useful enough, but the moment I wanted to log a session on my phone and check progress on my laptop, it fell apart.</p>
+
+      <p>Today we fixed that. And then some.</p>
+
+      <h2>The UI got a proper expansion first</h2>
+
+      <p>The app now covers six workout types instead of three: StrongLifts 5x5, rowing, kettlebell, barbell, dumbbell, and a dedicated body section for weight and measurements. The kettlebell list went from five exercises to fifteen. Row and kettlebell sessions got inline edit and delete. Body weight moved off the home page and into its own section with separate progress charts for weight, waist, hips, thighs, and upper arms. The bottom nav grew to eight items and became horizontally scrollable instead of cramped.</p>
+
+      <h2>Then the backend</h2>
+
+      <p>I had a Hostinger VPS I'd never really used. It came with n8n pre-installed via Docker and Traefik as the reverse proxy. That turned out to be a perfect foundation -- adding a new service meant adding a new block to docker-compose.yml with the right Traefik labels. SSL and routing came for free.</p>
+
+      <p>The backend is PocketBase -- a single open-source binary that runs as a Docker container and exposes a clean REST API with an admin dashboard out of the box. I set up the domain aetheriumforge.cloud to point to the VPS, created a subdomain for PocketBase, ran a Python script to create all eight collections and open their access rules, then rewrote the entire frontend data layer to talk to the API instead of IndexedDB.</p>
+
+      <p>One small debugging moment: PocketBase returned 400 errors on any request that sorted by <code>created</code>. Turned out the version I was running didn't support sorting by that system field directly. Switching the sort to <code>session_date</code> -- a field I control -- fixed it immediately.</p>
+
+      <h2>The result</h2>
+
+      <p>Log a session on your phone at the gym, open the laptop at home, the data is there. First time I've deployed a self-hosted backend from scratch and had it actually work in one session.</p>
+
+      <p>The domain will become home base for everything I build on the VPS. n8n is already there. Next up is an MCP server wrapper on top of PocketBase so Claude can query training history directly -- ask for a progress summary, spot patterns, get coaching without leaving the conversation.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
