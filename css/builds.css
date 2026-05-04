@@ -169,6 +169,52 @@
 }
 
 /* ========================
+   BUILD DETAIL BODY
+   ======================== */
+.build-detail {
+  margin-top: var(--space-xl);
+}
+
+.build-detail__heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-xl);
+  color: var(--text);
+}
+
+.build-detail__text {
+  font-size: 0.92rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.85;
+  margin-bottom: var(--space-sm);
+}
+
+.build-detail__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-md);
+}
+
+.build-detail__list li {
+  font-size: 0.92rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  line-height: 1.85;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.build-detail__list li::before {
+  content: '--';
+  position: absolute;
+  left: 0;
+  color: var(--text-dim);
+}
+
+/* ========================
    RESPONSIVE
    ======================== */
 @media (max-width: 768px) {

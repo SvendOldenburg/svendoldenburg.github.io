@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Training Tracker / Svend Oldenburg</title>
-  <meta name="description" content="PWA for logging strength training sessions. StrongLifts 5x5, rowing, and kettlebell.">
+  <meta name="description" content="Mobile-first training tracker with cloud sync. Logs strength, rowing, kettlebell, barbell, and dumbbell sessions. Backed by PocketBase on a self-hosted VPS.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
       <a href="index.html" class="post__back">&larr; All Builds</a>
       <span class="build-card__tag">Live</span>
       <h1 class="journal__title">Training Tracker</h1>
-      <p class="journal__desc">A progressive web app for logging strength training sessions. Covers StrongLifts 5x5, rowing, and kettlebell workouts. Installable on mobile.</p>
+      <p class="journal__desc">A mobile-first training app that logs every session and syncs across devices. Built as a PWA, backed by a self-hosted database on my own VPS. Phone at the gym, laptop at home -- same data everywhere.</p>
     </div>
 
     <div class="build-screenshot">
@@ -52,10 +52,28 @@
 
     <div class="build-live-card">
       <div>
-        <p class="build-live-card__tech">Vanilla JS / PWA</p>
-        <p class="build-live-card__desc">Live on GitHub Pages. Install to home screen for offline access.</p>
+        <p class="build-live-card__tech">Vanilla JS / PWA / PocketBase / VPS</p>
+        <p class="build-live-card__desc">Live on GitHub Pages. Install to home screen on Android or iOS for a native app feel.</p>
       </div>
       <a href="https://svendoldenburg.github.io/training-tracker/" class="build-live-card__link" target="_blank" rel="noopener">View live &rarr;</a>
+    </div>
+
+    <div class="build-detail">
+      <h2 class="build-detail__heading">What it tracks</h2>
+      <ul class="build-detail__list">
+        <li>StrongLifts 5x5 -- auto-progression, rest timer, workout A/B alternation</li>
+        <li>Rowing -- distance, time, split per 500m</li>
+        <li>Kettlebell -- 15 exercises, multi-set logging</li>
+        <li>Barbell and dumbbell accessory work</li>
+        <li>Body weight and measurements (waist, hips, thighs, upper arms) with trend charts</li>
+      </ul>
+
+      <h2 class="build-detail__heading">How it's built</h2>
+      <p class="build-detail__text">No framework, no build step. Vanilla JS ES modules, a hash-based router, and Chart.js for progress charts. The frontend is a PWA hosted on GitHub Pages -- installable directly from the browser.</p>
+      <p class="build-detail__text">Data is stored in PocketBase, an open-source backend running as a Docker container on a Hostinger VPS. All reads and writes go through the PocketBase REST API. The same domain hosts n8n and future tools -- Traefik handles routing and SSL automatically.</p>
+
+      <h2 class="build-detail__heading">What's next</h2>
+      <p class="build-detail__text">An MCP server wrapper on top of PocketBase so Claude can query training history directly. The use case: ask for a progress summary, spot patterns, get coaching without leaving the conversation.</p>
     </div>
   </main>
 
