@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy / Svend Oldenburg</title>
+  <meta name="description" content="Personal spending tracker. Quick entry on the go, receipt parsing via Telegram, multi-currency reporting, recurring cost calculator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/journal.css">
+  <link rel="stylesheet" href="../css/builds.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html#projects" class="nav__active">Projects</a></li>
+      <li><a href="../index.html#writing">Writing</a></li>
+      <li><a href="../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#writing">Writing</a></li>
+      <li><a href="../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <main class="journal">
+    <div class="journal__header">
+      <a href="index.html" class="post__back">&larr; All Builds</a>
+      <span class="build-card__tag">Building</span>
+      <h1 class="journal__title">Energy</h1>
+      <p class="journal__desc">A personal spending tracker built as an installable app. Quick entry from anywhere, receipt parsing via Telegram, and a full picture of where money goes -- by category, account, entity, and currency.</p>
+    </div>
+
+    <div class="build-screenshot">
+      <div class="build-screenshot__placeholder">Screenshot coming</div>
+    </div>
+
+    <div class="build-live-card">
+      <div>
+        <p class="build-live-card__tech">Vanilla JS / PWA / PocketBase / Telegram Bot / VPS</p>
+        <p class="build-live-card__desc">Private app at energy.svendoldenburg.com. Install to home screen on iOS or Android.</p>
+      </div>
+      <a href="https://energy.svendoldenburg.com" class="build-live-card__link" target="_blank" rel="noopener">Open app &rarr;</a>
+    </div>
+
+    <div class="build-detail">
+      <h2 class="build-detail__heading">What it tracks</h2>
+      <ul class="build-detail__list">
+        <li>Every spend: merchant, date, amount, currency, category, payment method</li>
+        <li>Three accounts: Lunar (personal DKK), Mercury (MFC USD), Wise (travel multi-currency)</li>
+        <li>Business vs personal split, plus entity tagging (personal / Cairn / MFC)</li>
+        <li>Recurring expenses with monthly and yearly cost totals</li>
+        <li>Multi-currency reporting in DKK, EUR, and USD -- converted at entry time</li>
+        <li>City and country per transaction for travel spending analysis</li>
+      </ul>
+
+      <h2 class="build-detail__heading">How it works</h2>
+      <p class="build-detail__text">Four views in a bottom-nav PWA: quick add, transaction list with filters, monthly overview dashboard, and a recurring costs breakdown.</p>
+      <p class="build-detail__text">The backend is PocketBase on the same VPS that runs the training tracker -- the same Docker + Traefik stack, just a new subdomain. Exchange rates are fetched live from the ExchangeRate API and cached per session.</p>
+      <p class="build-detail__text">Phase 2 adds a Telegram bot: send a photo of a receipt and Claude Vision parses the merchant, amount, and category. Send a text like "50 DKK coffee at La Glace" and it does the same. A confirmation card comes back, one tap saves it.</p>
+
+      <h2 class="build-detail__heading">What's next</h2>
+      <p class="build-detail__text">Telegram receipt bot (Phase 2). Budget tracking -- set monthly targets per category, see progress in real time (Phase 3). And eventually, Lunar open banking integration to pull transactions automatically rather than entering them manually (Phase 4).</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
