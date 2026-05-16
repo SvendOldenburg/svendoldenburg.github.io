@@ -28,15 +28,15 @@ Short, punchy, one-idea posts. Observations that cut against the grain. Things y
 ## Post Ideas by Pillar
 
 ### The Departure (Series)
-*Posts 1-3 live. Posts 4+ still to write.*
+*Posts 1-5 live. Posts 6-7 still to write.*
 
-- **Post 1 (live):** the-day-i-left -- The walk-out. No plan, no job lined up.
-- **Post 2 (live):** the-blank-page -- Two weeks out, Bangkok cafe, the vertigo of total freedom.
-- **Post 3 (live):** nothing-coherent-came-out -- The identity void. A stranger asks what you do. Learning to let preferences surface rather than forcing direction.
-- **Post 4:** The fear post. "The panic hits at 2pm on a Tuesday." Specific, bodily, unexpected.
-- **Post 5:** "Three things that chose me." The non-linear path. What you didn't expect to happen.
-- **Post 6:** "I moved to Vietnam with no plan. Here's what actually happened." The nomad chapter. Concrete, honest.
-- **Post 7:** "Six months in. What I know now that I didn't know when I walked out."
+- **Post 1 (live):** departure-1-the-day-i-left -- The walk-out. No plan, no job lined up. (Apr 18)
+- **Post 2 (live):** departure-2-the-blank-page -- Two weeks out, Bangkok cafe, the vertigo of total freedom. (Apr 24)
+- **Post 3 (live):** departure-3-nothing-coherent-came-out -- The identity void. A stranger asks what you do. Learning to let preferences surface rather than forcing direction. (May 1)
+- **Post 4 (live):** departure-4-new-years-day-hoi-an -- The fear post. New Year's Day, Hoi An rice fields. Not regret -- just the weight of not knowing how it plays out. What pulled me out wasn't a plan; it was moving to the next decision. (May 8)
+- **Post 5 (live):** departure-5-stuck-no-obligations -- Da Nang. Stopped moving. Fell deep into building with AI. "The trap isn't the job, it's the rhythm." (May 11)
+- **Post 6 (live):** departure-6-days-got-easy -- Three things that chose me. AI, writing, the inner thread. What surfaced when I stopped forcing it. (May 14)
+- **Post 7 (live):** departure-7-back-in-copenhagen -- The Copenhagen landing. Kastellet walk. Liminal space. Small steps forward. (May 14)
 
 **Expanded ideas for the Departure series:**
 
