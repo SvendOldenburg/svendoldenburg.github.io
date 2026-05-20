@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building an outbreak intelligence dashboard / Learning Journal</title>
+  <meta name="description" content="The news was full of outbreak fragments. I built a tool to pull it into one coherent picture. This is how it went.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/journal.css">
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav scrolled" id="nav">
+    <a href="../../index.html" class="nav__name">Svend Oldenburg</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="../index.html" class="nav__active">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav__overlay" id="navOverlay">
+    <ul>
+      <li><a href="../index.html">Journal</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#writing">Writing</a></li>
+      <li><a href="../../index.html#connect">Connect</a></li>
+    </ul>
+  </div>
+
+  <article class="post">
+    <header class="post__header">
+      <a href="../index.html" class="post__back">&larr; Back to journal</a>
+      <time class="post__date">May 20, 2026</time>
+      <h1 class="post__title">Building an outbreak intelligence dashboard</h1>
+    </header>
+
+    <div class="post__body">
+      <p>It started with curiosity. The news in early May had this background radiation of outbreak fragments -- Ebola in Uganda, hantavirus on a cruise ship, H5N1 spilling into humans, dengue outbreaks spreading into new territory, and more. All real. All reported in isolation, each one trying to fan the flames of fear and anxiety.</p>
+
+      <p>I wanted a single view that made sense of it. Not a news aggregator, because our agendas don't align. Which outbreaks are active right now? How fast are they moving? What are the trend curves? Who is tracking them? And most importantly: who is telling us this, who funds them, and how much should I trust it?</p>
+
+      <h2>Starting with the data</h2>
+
+      <p>Before writing a line of code I asked Claude to do a deep research pass on every possible outbreak data source: WHO, CDC, ECDC, ProMED, HealthMap, GISAID, Nextstrain, Our World in Data, WastewaterSCAN, and a dozen others. What do they publish? What format? How fast? Who funds them? What are the redistribution constraints? That report became the architecture.</p>
+
+      <h2>The stack</h2>
+
+      <p>PocketBase as the backend. Python scrapers writing to it. Vanilla JS frontend served by nginx behind Traefik. New subdomain, new compose block, same SSL cert resolver doing the work automatically.</p>
+
+      <p>Four PocketBase collections: sources (the trust layer), diseases (the disease registry), signals (the raw firehose), and events (the aggregated, human-meaningful outbreaks). All readable publicly. All write-protected except from the scraper token.</p>
+
+      <p>The scrapers run on timers -- WHO DON every 6 hours, HealthMap every 2. A third script runs hourly and rolls unprocessed signals into events, grouping by disease and country.</p>
+
+      <h2>The frontend</h2>
+
+      <p>Four views: a world map, trends over time, a signal feed, and a source trust panel.</p>
+
+      <p>On the map, countries with active outbreaks get colored by their highest-severity event: green for watch, yellow for concern, orange for alert, red for emergency. Click a country and a side panel slides in with every active outbreak, case counts, and a signal growth indicator comparing the last 7 days to the prior 7.</p>
+
+      <p>The trends chart is going to be the most interesting tool as the data set grows. It shows daily signal volume over any window from 14 to 90 days, broken down by disease, country, or source. Each series gets a 7-day growth summary below the chart. You can switch to a single-series view to isolate one disease or one country and see exactly how activity moved over time.</p>
+
+      <p>The feed is a reverse-chronological list of every raw signal with filters for source, disease, and country. The country filter is interesting -- it's auto-populated from the geocoded locations in each signal, so it only shows countries that actually appear in the data.</p>
+
+      <p>The source trust panel was the original motivation. Every data source gets a card: name, organisation type, funding summary, editorial independence score (1-5), transparency score (1-5), typical data latency, license notes, and a link. It's explicit about who is telling you what and why that might matter.</p>
+
+      <h2>What it is now</h2>
+
+      <p>As of today, the dashboard is live at outbreak.aetheriumforge.cloud. It's pulling real signals from WHO and HealthMap, mapping them, trending them, and showing the trust layer. The map has hand-curated events for the current PHEIC outbreaks. The scrapers are running on the VPS and adding new signals every few hours.</p>
+
+      <p>It's not polished. The events need more curation. Maybe some more info on the different diseases. Some geocoding is rough. But the pipeline works and the data is real. That's what matters at this stage.</p>
+
+      <p>The question it was built to answer -- who's infected, where, how it's moving, and who's telling you -- has an answer now. Not a perfect one, but a coherent one.</p>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Svend Oldenburg</p>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
