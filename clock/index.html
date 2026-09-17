@@ -117,12 +117,6 @@
     line-height: 1.1;
     margin: 0;
   }
-  .title-block p {
-    margin: 6px 0 0;
-    color: var(--ink-soft);
-    font-size: 14px;
-  }
-
   .hero {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -512,7 +506,6 @@
   <header>
     <div class="title-block">
       <h1>World Clock</h1>
-      <p>What time it is everywhere, and what that invitation means here.</p>
     </div>
     <button class="btn" id="theme-btn" aria-label="Change colour theme">Auto</button>
   </header>
@@ -528,9 +521,24 @@
     <div class="dn" aria-hidden="true"><i id="home-dn"></i></div>
   </div>
 
+  <!-- ---------- city grid ---------- -->
+  <section>
+    <div class="sec-label">
+      <span>Elsewhere</span>
+      <button class="btn" id="edit-btn" aria-pressed="false">Edit</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="grid-actions">
+      <button class="btn btn-primary" id="add-btn">Add city</button>
+      <button class="btn" id="sort-btn">Sort west to east</button>
+      <button class="btn" id="home-btn">Change &ldquo;here&rdquo;</button>
+      <button class="btn" id="reset-btn">Reset to defaults</button>
+    </div>
+  </section>
+
   <!-- ---------- converter ---------- -->
   <section>
-    <div class="sec-label"><span>Invitation in another time zone</span></div>
+    <div class="sec-label"><span>Time Zone Conversion</span></div>
     <div class="conv">
       <label class="sr" for="invite">Paste the time from the invitation</label>
       <textarea id="invite" rows="2" spellcheck="false"
@@ -563,24 +571,8 @@
     </div>
   </section>
 
-  <!-- ---------- city grid ---------- -->
-  <section>
-    <div class="sec-label">
-      <span>Elsewhere</span>
-      <button class="btn" id="edit-btn" aria-pressed="false">Edit</button>
-    </div>
-    <div class="grid" id="grid"></div>
-    <div class="grid-actions">
-      <button class="btn btn-primary" id="add-btn">Add city</button>
-      <button class="btn" id="sort-btn">Sort west to east</button>
-      <button class="btn" id="home-btn">Change &ldquo;here&rdquo;</button>
-      <button class="btn" id="reset-btn">Reset to defaults</button>
-    </div>
-  </section>
-
   <footer>
-    Runs entirely in your browser. No server, no network, works offline.<br>
-    Time zone data comes from your own operating system.
+    Created and fueled on coffee, love and a side of McD 🫶🏻
   </footer>
 </main>
 
@@ -826,8 +818,9 @@ const KEY = 'svo.clock.v1';
 const DEFAULTS = {
   home: 'Europe/Copenhagen',
   // Already west to east.
-  cities: ['America/Los_Angeles', 'America/New_York', 'Europe/London',
-           'Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'],
+  cities: ['America/Los_Angeles', 'America/Chicago', 'America/New_York',
+           'Europe/London', 'Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo',
+           'Australia/Sydney'],
   theme: 'auto'
 };
 
@@ -1586,9 +1579,8 @@ buildGrid();
 buildZoneSelect();
 startTicking();
 
-// Autofocus the paste box on a real keyboard only. On touch it would throw
-// the keyboard up the moment the page opens.
-if (matchMedia('(hover: hover) and (pointer: fine)').matches) invite.focus();
+// No autofocus: the converter sits below the clocks now, and focusing it
+// would scroll the page past them the moment it opens.
 </script>
 
 </body>
