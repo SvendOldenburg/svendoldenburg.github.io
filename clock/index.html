@@ -1,0 +1,1595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Clock</title>
+<meta name="description" content="What time is it everywhere, and what does that US webinar invitation mean in Copenhagen.">
+<meta name="theme-color" content="#F7F5F1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F1;
+    --surface: #FFFFFF;
+    --ink: #1E2530;
+    --ink-soft: #5B6472;
+    --border: #E7EAF0;
+    --cobalt: #0047AB;
+    --sage: #4F8A6D;
+    --err: #C0524A;
+    --err-border: #E8B9B4;
+    --night: #1B2135;
+    --twilight: #44406B;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171D;
+      --surface: #1C2029;
+      --ink: #ECEDF0;
+      --ink-soft: #9AA2B1;
+      --border: #2C3140;
+      --cobalt: #5B8FE0;
+      --sage: #7EC29A;
+      --err: #E8837A;
+      --err-border: #4A2E2C;
+      /* Lifted off the deep values: on a #1C2029 card the light-mode night
+         colour is invisible and the bar looks like it stops short. */
+      --night: #3A4160;
+      --twilight: #5E5892;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #14171D;
+    --surface: #1C2029;
+    --ink: #ECEDF0;
+    --ink-soft: #9AA2B1;
+    --border: #2C3140;
+    --cobalt: #5B8FE0;
+    --sage: #7EC29A;
+    --err: #E8837A;
+    --err-border: #4A2E2C;
+    --night: #3A4160;
+    --twilight: #5E5892;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 16px 56px;
+  }
+
+  main { width: 100%; max-width: 900px; }
+
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+  /* ---------- buttons & controls ---------- */
+
+  button, select, input, textarea {
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1.3;
+  }
+  .btn:hover { border-color: var(--ink-soft); }
+  .btn.is-on { border-color: var(--cobalt); color: var(--cobalt); }
+  .btn-primary { border-color: var(--cobalt); color: var(--cobalt); font-weight: 600; }
+
+  :is(button, select, input, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--cobalt);
+    outline-offset: 2px;
+  }
+
+  /* ---------- header / hero ---------- */
+
+  header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .title-block h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(26px, 5vw, 34px);
+    line-height: 1.1;
+    margin: 0;
+  }
+  .title-block p {
+    margin: 6px 0 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px 16px;
+    margin-bottom: 14px;
+  }
+
+  .hero-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .hero-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+  .hero-label .home-name { color: var(--ink); }
+
+  .hero-time {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(46px, 13vw, 76px);
+    line-height: 1;
+    margin: 6px 0 0;
+    letter-spacing: -0.01em;
+  }
+  .hero-time .sec {
+    font-size: 0.38em;
+    color: var(--ink-soft);
+    margin-left: 0.12em;
+    font-weight: 500;
+  }
+  .hero-meta {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  /* ---------- day/night bar ---------- */
+
+  .dn {
+    position: relative;
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: linear-gradient(90deg,
+      var(--night) 0%,    var(--night) 17%,
+      var(--twilight) 23%, #C4735A 28%,
+      #E8B461 33%, #F4DCA6 42%,
+      #F4DCA6 65%, #E8B461 73%,
+      #C4735A 78%, var(--twilight) 83%,
+      var(--night) 89%,   var(--night) 100%);
+  }
+  .hero .dn { margin-top: 16px; height: 5px; border-radius: 3px; }
+
+  .dn i {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    width: 2px;
+    margin-left: -1px;
+    background: #FFF;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.5);
+    transition: left 0.4s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dn i { transition: none; }
+  }
+
+  /* ---------- converter ---------- */
+
+  section { margin-bottom: 26px; }
+
+  .sec-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 0 0 10px 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .conv {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  #invite {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 11px 13px;
+    font-size: 15px;
+    line-height: 1.45;
+    resize: vertical;
+    min-height: 62px;
+  }
+  #invite::placeholder { color: var(--ink-soft); opacity: 0.75; }
+  #invite:focus { border-color: var(--cobalt); }
+
+  .examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
+  }
+  .examples .btn {
+    font-size: 12px;
+    padding: 5px 9px;
+    color: var(--ink-soft);
+    background: transparent;
+  }
+
+  .manual {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .manual label { font-size: 12.5px; color: var(--ink-soft); }
+  .manual input, .manual select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 9px;
+    font-size: 13px;
+  }
+  .manual.is-needed { color: var(--err); }
+  .manual.is-needed input, .manual.is-needed select { border-color: var(--err-border); }
+
+  .result {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .result[hidden] { display: none; }
+
+  .result-time {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(30px, 8vw, 44px);
+    line-height: 1.05;
+    color: var(--cobalt);
+  }
+  .result-date { font-size: 15px; font-weight: 600; margin-top: 4px; }
+  .result-rel { color: var(--ink-soft); font-size: 13.5px; margin-top: 3px; }
+
+  .echo {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .echo strong { color: var(--ink); font-weight: 600; }
+
+  .notes { list-style: none; margin: 10px 0 0; padding: 0; }
+  .notes li {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    padding-left: 18px;
+    position: relative;
+    margin-top: 5px;
+  }
+  .notes li::before {
+    content: "!";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 12px;
+    text-align: center;
+    opacity: 0.75;
+  }
+  .notes li.warn { color: var(--err); }
+
+  .result-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+  .parse-fail { color: var(--err); font-size: 13px; margin-top: 12px; }
+
+  /* ---------- city grid ---------- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+  }
+  /* Two columns still beat one on a phone: less scrolling, and a 170px card
+     holds "08:02" comfortably. Only drop to one on the very narrowest. */
+  @media (max-width: 400px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .card { padding: 12px 12px 10px; }
+  }
+  @media (max-width: 330px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 15px 12px;
+    position: relative;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card-city {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.3;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .badge {
+    flex-shrink: 0;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--cobalt);
+    border: 1px solid currentColor;
+    border-radius: 5px;
+    padding: 1px 4px;
+    line-height: 1.4;
+  }
+  .card-sub {
+    color: var(--ink-soft);
+    font-size: 11.5px;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .card-time {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(30px, 6vw, 34px);
+    line-height: 1.1;
+    margin-top: 8px;
+  }
+  .card-time .sec {
+    font-size: 0.42em;
+    color: var(--ink-soft);
+    margin-left: 0.1em;
+    font-weight: 500;
+  }
+  .card-meta {
+    color: var(--ink-soft);
+    font-size: 11.5px;
+    margin: 2px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-tools {
+    display: none;
+    gap: 5px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  body.editing .card-tools { display: flex; }
+  .card-tools .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1.2;
+    min-width: 30px;
+  }
+  .card-tools .grow { flex: 1; }
+
+  .grid-actions { display: none; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  body.editing .grid-actions { display: flex; }
+
+  /* ---------- city picker ---------- */
+
+  dialog {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 12px;
+    padding: 0;
+    width: min(440px, calc(100vw - 32px));
+    max-height: min(560px, calc(100vh - 64px));
+    overflow: hidden;
+  }
+  dialog::backdrop { background: rgba(8,10,14,0.5); }
+
+  .pick-head {
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pick-head h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  #pick-q {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-size: 15px;
+  }
+  #pick-q:focus { border-color: var(--cobalt); }
+
+  #pick-list {
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    max-height: 380px;
+  }
+  #pick-list li { margin: 0; }
+  #pick-list button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: 0;
+    border-radius: 8px;
+    padding: 9px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  #pick-list button:hover, #pick-list button:focus-visible { background: var(--bg); }
+  #pick-list .z { color: var(--ink-soft); font-size: 11.5px; }
+  #pick-list .none { padding: 18px 10px; color: var(--ink-soft); font-size: 13.5px; }
+
+  .pick-foot {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    opacity: 0.7;
+    line-height: 1.6;
+  }
+
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <header>
+    <div class="title-block">
+      <h1>World Clock</h1>
+      <p>What time it is everywhere, and what that invitation means here.</p>
+    </div>
+    <button class="btn" id="theme-btn" aria-label="Change colour theme">Auto</button>
+  </header>
+
+  <!-- ---------- hero: home city ---------- -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-label">Here &middot; <span class="home-name" id="home-name">Copenhagen</span></div>
+      <div class="hero-label num" id="home-offset">&nbsp;</div>
+    </div>
+    <div class="hero-time num" id="home-time">--:--<span class="sec" aria-hidden="true">--</span></div>
+    <div class="hero-meta" id="home-date">&nbsp;</div>
+    <div class="dn" aria-hidden="true"><i id="home-dn"></i></div>
+  </div>
+
+  <!-- ---------- converter ---------- -->
+  <section>
+    <div class="sec-label"><span>Invitation in another time zone</span></div>
+    <div class="conv">
+      <label class="sr" for="invite">Paste the time from the invitation</label>
+      <textarea id="invite" rows="2" spellcheck="false"
+        placeholder="Paste it here &mdash; e.g. Tuesday, March 3 at 11:00 AM PST"></textarea>
+
+      <div class="examples" id="examples"></div>
+
+      <div class="manual" id="manual">
+        <label for="m-date">or set it:</label>
+        <input type="date" id="m-date" aria-label="Date">
+        <input type="time" id="m-time" aria-label="Time" step="60">
+        <select id="m-zone" aria-label="Time zone"></select>
+      </div>
+
+      <div class="result" id="result" hidden aria-live="polite">
+        <div class="result-time num" id="r-time">--:--</div>
+        <div class="result-date" id="r-date"></div>
+        <div class="result-rel" id="r-rel"></div>
+        <div class="echo" id="r-echo"></div>
+        <ul class="notes" id="r-notes"></ul>
+        <div class="result-actions">
+          <button class="btn btn-primary" id="copy-btn">Copy</button>
+          <button class="btn" id="ics-btn">Add to calendar</button>
+        </div>
+      </div>
+
+      <div class="parse-fail" id="parse-fail" hidden>
+        Couldn&rsquo;t read a time out of that. Set it by hand just below.
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- city grid ---------- -->
+  <section>
+    <div class="sec-label">
+      <span>Elsewhere</span>
+      <button class="btn" id="edit-btn" aria-pressed="false">Edit</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="grid-actions">
+      <button class="btn btn-primary" id="add-btn">Add city</button>
+      <button class="btn" id="sort-btn">Sort west to east</button>
+      <button class="btn" id="home-btn">Change &ldquo;here&rdquo;</button>
+      <button class="btn" id="reset-btn">Reset to defaults</button>
+    </div>
+  </section>
+
+  <footer>
+    Runs entirely in your browser. No server, no network, works offline.<br>
+    Time zone data comes from your own operating system.
+  </footer>
+</main>
+
+<!-- ---------- city picker ---------- -->
+<dialog id="pick">
+  <div class="pick-head">
+    <h2 id="pick-title">Add a city</h2>
+    <input type="search" id="pick-q" placeholder="Search city, country or zone" autocomplete="off" spellcheck="false">
+  </div>
+  <ul id="pick-list"></ul>
+  <div class="pick-foot"><button class="btn" id="pick-close">Close</button></div>
+</dialog>
+
+<script>
+'use strict';
+
+/* =====================================================================
+   Time zone maths.
+
+   Everything rests on one primitive: read a UTC instant back out as the
+   wall-clock numbers a given zone would show. Intl.DateTimeFormat ships
+   the full IANA database in every browser, so there is nothing to fetch.
+
+   hourCycle:'h23' rather than hour12:false -- the latter resolves to h24
+   in some engines and hands back hour "24" at midnight.
+   ===================================================================== */
+
+const fmtCache = new Map();
+function pf(zone) {
+  let f = fmtCache.get(zone);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', {
+      timeZone: zone, hourCycle: 'h23',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    fmtCache.set(zone, f);
+  }
+  return f;
+}
+
+// Wall-clock numbers in `zone` at instant `ts`, plus that zone's offset there.
+function zoneParts(ts, zone) {
+  const p = {};
+  for (const { type, value } of pf(zone).formatToParts(ts)) p[type] = value;
+  const y = +p.year, mo = +p.month, d = +p.day;
+  const h = +p.hour, mi = +p.minute, s = +p.second;
+  const asUTC = Date.UTC(y, mo - 1, d, h, mi, s);
+  return { y, mo, d, h, mi, s, offset: asUTC - Math.floor(ts / 1000) * 1000 };
+}
+
+function offsetAt(ts, zone) { return zoneParts(ts, zone).offset; }
+
+/* A naive wall-clock reading in `zone` -> the real instant.
+
+   Probe the offset a day either side. Near a DST transition those differ,
+   so both candidates get tested against a round-trip. That is what lets us
+   *detect* the two pathological cases instead of silently returning a wrong
+   answer an hour off.
+
+     - no candidate round-trips  -> that clock time never happened
+       (spring forward). Shift forward by the gap, the usual convention.
+     - both round-trip           -> it happened twice (fall back).
+       Take the earlier one, matching ICU.
+*/
+function wallToInstant(y, mo, d, h, mi, zone) {
+  const naive = Date.UTC(y, mo - 1, d, h, mi, 0);
+  const a = offsetAt(naive - 864e5, zone);
+  const b = offsetAt(naive + 864e5, zone);
+  const cands = [...new Set([naive - a, naive - b])];
+  const valid = cands.filter(ts => offsetAt(ts, zone) === naive - ts);
+  if (valid.length) {
+    return { ts: Math.min(...valid), ambiguous: valid.length > 1, skipped: false };
+  }
+  return { ts: naive - Math.min(a, b), ambiguous: false, skipped: true };
+}
+
+const WD = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const WD3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MON = ['January', 'February', 'March', 'April', 'May', 'June',
+             'July', 'August', 'September', 'October', 'November', 'December'];
+const MON3 = MON.map(m => m.slice(0, 3));
+
+function weekdayOf(p) { return new Date(Date.UTC(p.y, p.mo - 1, p.d)).getUTCDay(); }
+function pad(n) { return String(n).padStart(2, '0'); }
+function dayKey(p) { return p.y + '-' + pad(p.mo) + '-' + pad(p.d); }
+
+function offsetLabel(ms) {
+  const sign = ms < 0 ? '−' : '+';            // U+2212 minus, not a hyphen
+  const total = Math.round(Math.abs(ms) / 60000);
+  const h = Math.floor(total / 60), m = total % 60;
+  return 'UTC' + sign + h + (m ? ':' + pad(m) : '');
+}
+
+/* Short name the zone reports (EDT, CEST, BST ...). No single locale knows
+   them all: en-US gives EDT but "GMT+2" for Copenhagen, en-GB gives CEST but
+   "GMT-4" for New York. Try both and keep the first real abbreviation.
+   Zones that genuinely have no name (Singapore, Tokyo) return '' so callers
+   can fall back to the numeric offset alone rather than print it twice. */
+const abbrCache = new Map();
+function abbrFmt(zone, locale) {
+  const k = locale + '|' + zone;
+  let f = abbrCache.get(k);
+  if (!f) {
+    f = new Intl.DateTimeFormat(locale, { timeZone: zone, timeZoneName: 'short' });
+    abbrCache.set(k, f);
+  }
+  return f;
+}
+function zoneAbbr(ts, zone) {
+  for (const loc of ['en-US', 'en-GB']) {
+    const part = abbrFmt(zone, loc).formatToParts(ts).find(p => p.type === 'timeZoneName');
+    const v = part ? part.value : '';
+    if (v && !/^(GMT|UTC)[+−-]/.test(v)) return v;
+  }
+  return '';
+}
+
+// "CEST · UTC+2", or just "UTC+8" where the zone has no abbreviation.
+function zoneTag(ts, zone, offset) {
+  const a = zoneAbbr(ts, zone);
+  const off = offset === undefined ? offsetAt(ts, zone) : offset;
+  if (off === 0 && /^(UTC|GMT)$/.test(a)) return a;
+  const o = offsetLabel(off);
+  return a ? a + ' · ' + o : o;
+}
+
+/* =====================================================================
+   Cities. Hand-picked rather than Intl.supportedValuesOf('timeZone'),
+   which is accurate but hands you 418 raw IANA identifiers to browse.
+   The raw list is still reachable as a fallback in the picker.
+   ===================================================================== */
+
+const CITIES = [
+  ['Honolulu', 'United States', 'Pacific/Honolulu'],
+  ['Anchorage', 'United States', 'America/Anchorage'],
+  ['Los Angeles', 'United States', 'America/Los_Angeles'],
+  ['San Francisco', 'United States', 'America/Los_Angeles'],
+  ['Seattle', 'United States', 'America/Los_Angeles'],
+  ['Vancouver', 'Canada', 'America/Vancouver'],
+  ['Phoenix', 'United States', 'America/Phoenix'],
+  ['Denver', 'United States', 'America/Denver'],
+  ['Mexico City', 'Mexico', 'America/Mexico_City'],
+  ['Chicago', 'United States', 'America/Chicago'],
+  ['Dallas', 'United States', 'America/Chicago'],
+  ['Austin', 'United States', 'America/Chicago'],
+  ['Bogotá', 'Colombia', 'America/Bogota'],
+  ['Lima', 'Peru', 'America/Lima'],
+  ['New York', 'United States', 'America/New_York'],
+  ['Boston', 'United States', 'America/New_York'],
+  ['Washington DC', 'United States', 'America/New_York'],
+  ['Atlanta', 'United States', 'America/New_York'],
+  ['Miami', 'United States', 'America/New_York'],
+  ['Toronto', 'Canada', 'America/Toronto'],
+  ['Santiago', 'Chile', 'America/Santiago'],
+  ['Halifax', 'Canada', 'America/Halifax'],
+  ['São Paulo', 'Brazil', 'America/Sao_Paulo'],
+  ['Buenos Aires', 'Argentina', 'America/Argentina/Buenos_Aires'],
+  ['Azores', 'Portugal', 'Atlantic/Azores'],
+  ['Reykjavík', 'Iceland', 'Atlantic/Reykjavik'],
+  ['UTC', 'Coordinated Universal Time', 'UTC'],
+  ['London', 'United Kingdom', 'Europe/London'],
+  ['Dublin', 'Ireland', 'Europe/Dublin'],
+  ['Lisbon', 'Portugal', 'Europe/Lisbon'],
+  ['Copenhagen', 'Denmark', 'Europe/Copenhagen'],
+  ['Amsterdam', 'Netherlands', 'Europe/Amsterdam'],
+  ['Berlin', 'Germany', 'Europe/Berlin'],
+  ['Paris', 'France', 'Europe/Paris'],
+  ['Madrid', 'Spain', 'Europe/Madrid'],
+  ['Barcelona', 'Spain', 'Europe/Madrid'],
+  ['Rome', 'Italy', 'Europe/Rome'],
+  ['Milan', 'Italy', 'Europe/Rome'],
+  ['Zürich', 'Switzerland', 'Europe/Zurich'],
+  ['Vienna', 'Austria', 'Europe/Vienna'],
+  ['Prague', 'Czechia', 'Europe/Prague'],
+  ['Warsaw', 'Poland', 'Europe/Warsaw'],
+  ['Stockholm', 'Sweden', 'Europe/Stockholm'],
+  ['Oslo', 'Norway', 'Europe/Oslo'],
+  ['Lagos', 'Nigeria', 'Africa/Lagos'],
+  ['Helsinki', 'Finland', 'Europe/Helsinki'],
+  ['Athens', 'Greece', 'Europe/Athens'],
+  ['Bucharest', 'Romania', 'Europe/Bucharest'],
+  ['Kyiv', 'Ukraine', 'Europe/Kiev'],
+  ['Istanbul', 'Türkiye', 'Europe/Istanbul'],
+  ['Cairo', 'Egypt', 'Africa/Cairo'],
+  ['Johannesburg', 'South Africa', 'Africa/Johannesburg'],
+  ['Tel Aviv', 'Israel', 'Asia/Tel_Aviv'],
+  ['Nairobi', 'Kenya', 'Africa/Nairobi'],
+  ['Moscow', 'Russia', 'Europe/Moscow'],
+  ['Riyadh', 'Saudi Arabia', 'Asia/Riyadh'],
+  ['Tehran', 'Iran', 'Asia/Tehran'],
+  ['Dubai', 'United Arab Emirates', 'Asia/Dubai'],
+  ['Abu Dhabi', 'United Arab Emirates', 'Asia/Dubai'],
+  ['Baku', 'Azerbaijan', 'Asia/Baku'],
+  ['Karachi', 'Pakistan', 'Asia/Karachi'],
+  ['Tashkent', 'Uzbekistan', 'Asia/Tashkent'],
+  ['Mumbai', 'India', 'Asia/Kolkata'],
+  ['Delhi', 'India', 'Asia/Kolkata'],
+  ['Bengaluru', 'India', 'Asia/Kolkata'],
+  ['Kathmandu', 'Nepal', 'Asia/Kathmandu'],
+  ['Dhaka', 'Bangladesh', 'Asia/Dhaka'],
+  ['Colombo', 'Sri Lanka', 'Asia/Colombo'],
+  ['Bangkok', 'Thailand', 'Asia/Bangkok'],
+  ['Jakarta', 'Indonesia', 'Asia/Jakarta'],
+  ['Ho Chi Minh City', 'Vietnam', 'Asia/Ho_Chi_Minh'],
+  ['Singapore', 'Singapore', 'Asia/Singapore'],
+  ['Kuala Lumpur', 'Malaysia', 'Asia/Kuala_Lumpur'],
+  ['Hong Kong', 'Hong Kong', 'Asia/Hong_Kong'],
+  ['Shanghai', 'China', 'Asia/Shanghai'],
+  ['Beijing', 'China', 'Asia/Shanghai'],
+  ['Shenzhen', 'China', 'Asia/Shanghai'],
+  ['Taipei', 'Taiwan', 'Asia/Taipei'],
+  ['Manila', 'Philippines', 'Asia/Manila'],
+  ['Perth', 'Australia', 'Australia/Perth'],
+  ['Tokyo', 'Japan', 'Asia/Tokyo'],
+  ['Osaka', 'Japan', 'Asia/Tokyo'],
+  ['Seoul', 'South Korea', 'Asia/Seoul'],
+  ['Adelaide', 'Australia', 'Australia/Adelaide'],
+  ['Brisbane', 'Australia', 'Australia/Brisbane'],
+  ['Sydney', 'Australia', 'Australia/Sydney'],
+  ['Melbourne', 'Australia', 'Australia/Melbourne'],
+  ['Auckland', 'New Zealand', 'Pacific/Auckland'],
+  ['Fiji', 'Fiji', 'Pacific/Fiji']
+].map(([city, country, zone]) => ({ city, country, zone }));
+
+const byZone = new Map();
+for (const c of CITIES) if (!byZone.has(c.zone)) byZone.set(c.zone, c);
+
+function labelFor(zone) {
+  const c = byZone.get(zone);
+  if (c) return { city: c.city, country: c.country };
+  // A raw IANA id picked from the fallback list.
+  const tail = zone.split('/').pop().replace(/_/g, ' ');
+  return { city: tail, country: zone.split('/')[0].replace(/_/g, ' ') };
+}
+
+/* =====================================================================
+   State + persistence. Every storage touch is guarded: a private window
+   with site data blocked must still render the defaults.
+   ===================================================================== */
+
+const KEY = 'svo.clock.v1';
+const DEFAULTS = {
+  home: 'Europe/Copenhagen',
+  // Already west to east.
+  cities: ['America/Los_Angeles', 'America/New_York', 'Europe/London',
+           'Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'],
+  theme: 'auto'
+};
+
+let state = load();
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return structuredClone(DEFAULTS);
+    const o = JSON.parse(raw);
+    if (!o || o.v !== 1 || !Array.isArray(o.cities)) return structuredClone(DEFAULTS);
+    return {
+      home: typeof o.home === 'string' ? o.home : DEFAULTS.home,
+      cities: o.cities.filter(z => typeof z === 'string'),
+      theme: ['auto', 'light', 'dark'].includes(o.theme) ? o.theme : 'auto'
+    };
+  } catch (e) {
+    return structuredClone(DEFAULTS);
+  }
+}
+
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify({ v: 1, ...state }));
+  } catch (e) { /* storage blocked -- the page still works, just forgets */ }
+}
+
+// A zone the browser refuses would throw on every tick. Drop it once, here.
+function validateZones() {
+  const ok = z => { try { pf(z).format(0); return true; } catch (e) { return false; } };
+  if (!ok(state.home)) state.home = DEFAULTS.home;
+  state.cities = state.cities.filter(ok);
+}
+validateZones();
+
+/* =====================================================================
+   Theme
+   ===================================================================== */
+
+const themeBtn = document.getElementById('theme-btn');
+const THEMES = ['auto', 'light', 'dark'];
+
+function applyTheme() {
+  const t = state.theme;
+  if (t === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = t[0].toUpperCase() + t.slice(1);
+  const dark = t === 'dark' ||
+    (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]')
+    .setAttribute('content', dark ? '#14171D' : '#F7F5F1');
+}
+themeBtn.addEventListener('click', () => {
+  state.theme = THEMES[(THEMES.indexOf(state.theme) + 1) % 3];
+  applyTheme();
+  save();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+applyTheme();
+
+/* =====================================================================
+   The clock wall
+   ===================================================================== */
+
+const grid = document.getElementById('grid');
+const homeEls = {
+  name: document.getElementById('home-name'),
+  offset: document.getElementById('home-offset'),
+  time: document.getElementById('home-time'),
+  date: document.getElementById('home-date'),
+  dn: document.getElementById('home-dn')
+};
+
+let cardEls = [];   // rebuilt only when the city list changes, not every tick
+
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function buildGrid() {
+  grid.innerHTML = '';
+  cardEls = state.cities.map((zone, i) => {
+    const { city, country } = labelFor(zone);
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML =
+      '<div class="card-head">' +
+        '<div class="card-city">' + escapeHtml(city) + '</div>' +
+        '<div class="badge" hidden></div>' +
+      '</div>' +
+      '<div class="card-sub">' + escapeHtml(country) + '</div>' +
+      '<time class="card-time num"></time>' +
+      '<div class="card-meta"><span class="d"></span><span class="o"></span></div>' +
+      '<div class="dn" aria-hidden="true"><i></i></div>' +
+      '<div class="card-tools">' +
+        '<button class="btn up" title="Move earlier" aria-label="Move ' + escapeHtml(city) + ' up">↑</button>' +
+        '<button class="btn down" title="Move later" aria-label="Move ' + escapeHtml(city) + ' down">↓</button>' +
+        '<button class="btn grow rm" aria-label="Remove ' + escapeHtml(city) + '">Remove</button>' +
+      '</div>';
+    el.querySelector('.up').addEventListener('click', () => move(i, -1));
+    el.querySelector('.down').addEventListener('click', () => move(i, 1));
+    el.querySelector('.rm').addEventListener('click', () => remove(i));
+    grid.appendChild(el);
+    return {
+      zone,
+      badge: el.querySelector('.badge'),
+      time: el.querySelector('.card-time'),
+      d: el.querySelector('.card-meta .d'),
+      o: el.querySelector('.card-meta .o'),
+      dn: el.querySelector('.dn i')
+    };
+  });
+  render();
+}
+
+function dnLeft(p) { return ((p.h + p.mi / 60) / 24 * 100).toFixed(2) + '%'; }
+function timeHtml(p) {
+  return pad(p.h) + ':' + pad(p.mi) +
+    '<span class="sec" aria-hidden="true">' + pad(p.s) + '</span>';
+}
+
+function render() {
+  const ts = Date.now();
+
+  const hp = zoneParts(ts, state.home);
+  const hl = labelFor(state.home);
+  homeEls.name.textContent = hl.city;
+  homeEls.time.innerHTML = timeHtml(hp);
+  homeEls.date.textContent =
+    WD[weekdayOf(hp)] + ' ' + hp.d + ' ' + MON[hp.mo - 1] + ' ' + hp.y;
+  homeEls.offset.textContent = zoneTag(ts, state.home, hp.offset);
+  homeEls.dn.style.left = dnLeft(hp);
+
+  const homeDay = Date.UTC(hp.y, hp.mo - 1, hp.d);
+
+  for (const c of cardEls) {
+    const p = zoneParts(ts, c.zone);
+    c.time.innerHTML = timeHtml(p);
+    c.time.setAttribute('datetime',
+      dayKey(p) + 'T' + pad(p.h) + ':' + pad(p.mi) + ':' + pad(p.s));
+    c.d.textContent = WD3[weekdayOf(p)] + ' ' + p.d + ' ' + MON3[p.mo - 1];
+    c.o.textContent = offsetLabel(p.offset);
+    c.dn.style.left = dnLeft(p);
+
+    const delta = Math.round((Date.UTC(p.y, p.mo - 1, p.d) - homeDay) / 864e5);
+    if (delta === 0) {
+      c.badge.hidden = true;
+    } else {
+      c.badge.hidden = false;
+      c.badge.textContent = (delta > 0 ? '+' : '−') + Math.abs(delta) + 'd';
+      c.badge.title = delta > 0 ? 'A day ahead of ' + hl.city : 'A day behind ' + hl.city;
+    }
+  }
+}
+
+/* Self-correcting timeout, not setInterval: that drifts, and after the
+   machine sleeps it can fire a burst of catch-up ticks. Recomputing from
+   Date.now() every tick means sleep and clock changes heal themselves. */
+let timer = null;
+function tick() {
+  render();
+  timer = setTimeout(tick, 1000 - (Date.now() % 1000) + 5);
+}
+function startTicking() {
+  if (timer) clearTimeout(timer);
+  tick();
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    clearTimeout(timer);
+    timer = null;
+  } else {
+    startTicking();
+  }
+});
+
+/* ---------- editing the wall ---------- */
+
+const editBtn = document.getElementById('edit-btn');
+editBtn.addEventListener('click', () => {
+  const on = document.body.classList.toggle('editing');
+  editBtn.setAttribute('aria-pressed', String(on));
+  editBtn.classList.toggle('is-on', on);
+  editBtn.textContent = on ? 'Done' : 'Edit';
+});
+
+function move(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= state.cities.length) return;
+  [state.cities[i], state.cities[j]] = [state.cities[j], state.cities[i]];
+  save();
+  buildGrid();
+}
+
+function remove(i) {
+  state.cities.splice(i, 1);
+  save();
+  buildGrid();
+}
+
+document.getElementById('sort-btn').addEventListener('click', () => {
+  const ts = Date.now();
+  state.cities.sort((a, b) => offsetAt(ts, a) - offsetAt(ts, b));
+  save();
+  buildGrid();
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  state = structuredClone(DEFAULTS);
+  save();
+  applyTheme();
+  buildGrid();
+  buildZoneSelect();
+  recompute();
+});
+
+/* =====================================================================
+   City picker
+   ===================================================================== */
+
+const pick = document.getElementById('pick');
+const pickQ = document.getElementById('pick-q');
+const pickList = document.getElementById('pick-list');
+const pickTitle = document.getElementById('pick-title');
+let pickMode = 'add';
+
+function openPick(mode) {
+  pickMode = mode;
+  pickTitle.textContent = mode === 'add' ? 'Add a city' : 'Where are you?';
+  pickQ.value = '';
+  renderPick();
+  pick.showModal();
+  pickQ.focus();
+}
+
+function rawZones() {
+  try {
+    return typeof Intl.supportedValuesOf === 'function'
+      ? Intl.supportedValuesOf('timeZone') : [];
+  } catch (e) { return []; }
+}
+
+function renderPick() {
+  const q = pickQ.value.trim().toLowerCase();
+  let rows = CITIES;
+  if (q) {
+    rows = CITIES.filter(c =>
+      c.city.toLowerCase().includes(q) ||
+      c.country.toLowerCase().includes(q) ||
+      c.zone.toLowerCase().replace(/_/g, ' ').includes(q));
+  }
+  if (pickMode === 'add') rows = rows.filter(c => !state.cities.includes(c.zone));
+
+  // Nothing curated matched: fall through to the raw IANA list.
+  let raw = [];
+  if (q && !rows.length) {
+    raw = rawZones()
+      .filter(z => z.toLowerCase().replace(/_/g, ' ').includes(q))
+      .filter(z => pickMode !== 'add' || !state.cities.includes(z))
+      .slice(0, 40)
+      .map(z => ({ city: z, country: 'IANA zone', zone: z }));
+  }
+
+  const all = rows.slice(0, 200).concat(raw);
+  if (!all.length) {
+    pickList.innerHTML = '<li class="none">Nothing matches that.</li>';
+    return;
+  }
+  pickList.innerHTML = all.map((c, i) =>
+    '<li><button data-z="' + escapeHtml(c.zone) + '" data-i="' + i + '">' +
+      escapeHtml(c.city) +
+      ' <span class="z">' + escapeHtml(c.country) + '</span>' +
+    '</button></li>').join('');
+}
+
+pickList.addEventListener('click', e => {
+  const b = e.target.closest('button[data-z]');
+  if (b) choose(b.dataset.z);
+});
+
+function choose(zone) {
+  if (pickMode === 'add') {
+    if (!state.cities.includes(zone)) state.cities.push(zone);
+    buildGrid();
+  } else {
+    state.home = zone;
+    buildZoneSelect();
+    recompute();
+    render();
+  }
+  save();
+  pick.close();
+}
+
+pickQ.addEventListener('input', renderPick);
+pickQ.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const first = pickList.querySelector('button[data-z]');
+    if (first) choose(first.dataset.z);
+  }
+});
+document.getElementById('pick-close').addEventListener('click', () => pick.close());
+document.getElementById('add-btn').addEventListener('click', () => openPick('add'));
+document.getElementById('home-btn').addEventListener('click', () => openPick('home'));
+
+/* =====================================================================
+   The invitation parser.
+
+   Extract in order, removing each match from the working string as it is
+   consumed. Date before time matters: otherwise "March 3, 2027" donates a
+   "3" or a "20:27" to the time parser.
+   ===================================================================== */
+
+const ZONE_TOKENS = [
+  { re: /\b(pacific(?:\s+time)?|pdt|pst|pt)\b/i,        zone: 'America/Los_Angeles', label: 'Pacific',           dst: 'pdt', std: 'pst' },
+  { re: /\b(mountain(?:\s+time)?|mdt|mst|mt)\b/i,       zone: 'America/Denver',      label: 'Mountain',          dst: 'mdt', std: 'mst' },
+  { re: /\b(central\s+time|cdt|cst|ct)\b/i,             zone: 'America/Chicago',     label: 'US Central',        dst: 'cdt', std: 'cst' },
+  { re: /\b(eastern(?:\s+time)?|edt|est|et)\b/i,        zone: 'America/New_York',    label: 'Eastern',           dst: 'edt', std: 'est' },
+  { re: /\b(cest|cet)\b/i,                              zone: 'Europe/Copenhagen',   label: 'Central European',  dst: 'cest', std: 'cet' },
+  { re: /\b(bst|uk\s+time|london\s+time)\b/i,           zone: 'Europe/London',       label: 'UK',                dst: 'bst', std: 'gmt' },
+  { re: /\b(ist)\b/i,                                   zone: 'Asia/Kolkata',        label: 'India' },
+  { re: /\b(jst)\b/i,                                   zone: 'Asia/Tokyo',          label: 'Japan' },
+  { re: /\b(sgt)\b/i,                                   zone: 'Asia/Singapore',      label: 'Singapore' },
+  { re: /\b(aedt|aest)\b/i,                             zone: 'Australia/Sydney',    label: 'Sydney',            dst: 'aedt', std: 'aest' },
+  { re: /\b(gst)\b/i,                                   zone: 'Asia/Dubai',          label: 'Gulf' },
+  { re: /\b(nzdt|nzst)\b/i,                             zone: 'Pacific/Auckland',    label: 'New Zealand',       dst: 'nzdt', std: 'nzst' },
+  { re: /\b(utc|gmt)\b/i,                               zone: 'UTC',                 label: 'UTC' }
+];
+
+const MONTH_RE = '(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|' +
+                 'jul(?:y)?|aug(?:ust)?|sep(?:t)?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+
+function monthIndex(s) {
+  const k = s.slice(0, 3).toLowerCase();
+  return MON3.findIndex(m => m.toLowerCase() === k);
+}
+
+function parseInvite(text) {
+  const notes = [];
+  const src = text.trim();
+  if (!src) return null;
+
+  // --- shortcut: a full ISO stamp carrying its own offset ---
+  const iso = src.match(/\b(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2})(?::\d{2})?\s*(Z|[+−-]\d{2}:?\d{2})/i);
+  if (iso) {
+    const off = iso[3].replace('−', '-');
+    const d = new Date(iso[1] + 'T' + iso[2] + ':00' + (/^z$/i.test(off) ? 'Z' : off));
+    if (!isNaN(d)) {
+      return {
+        ts: d.getTime(), zone: null,
+        zoneLabel: /^z$/i.test(off) ? 'UTC' : 'UTC' + off,
+        wall: iso[2], wallDate: iso[1], notes, skipped: false, ambiguous: false
+      };
+    }
+  }
+
+  let work = ' ' + src.replace(/\s+/g, ' ') + ' ';
+  const eat = (re) => {
+    const m = work.match(re);
+    if (m) work = work.replace(m[0], ' ');
+    return m;
+  };
+
+  // --- explicit UTC/GMT offset, e.g. (UTC-7), GMT+02:00 ---
+  let fixedOffset = null, zoneLabel = null, zone = null, token = null;
+  const offm = eat(/\(?\b(?:utc|gmt)\s*([+−-])\s*(\d{1,2})(?::?(\d{2}))?\b\)?/i);
+  if (offm) {
+    const sign = offm[1] === '+' ? 1 : -1;
+    fixedOffset = sign * ((+offm[2]) * 60 + (+(offm[3] || 0))) * 60000;
+    zoneLabel = 'UTC' + (sign < 0 ? '−' : '+') + offm[2] + (offm[3] ? ':' + offm[3] : '');
+  }
+
+  // --- named zone ---
+  for (const t of ZONE_TOKENS) {
+    const m = eat(t.re);
+    if (m) { zone = t.zone; token = { ...t, matched: m[1].toLowerCase() }; break; }
+  }
+  if (zone && fixedOffset !== null) {
+    // Both given. Trust the named zone; it survives DST, a bare offset does not.
+    notes.push({ text: 'The invitation also gave ' + zoneLabel +
+      '. Using ' + token.label + ' time, resolved for that date.' });
+    fixedOffset = null;
+  }
+  if (zone) zoneLabel = token.label;
+
+  // --- date ---
+  let y = null, mo = null, d = null, weekdayWanted = null, assumedYear = false;
+  let m;
+  if ((m = eat(new RegExp('\\b' + MONTH_RE + '\\.?\\s+(\\d{1,2})(?:st|nd|rd|th)?(?:,?\\s*(\\d{4}))?\\b', 'i')))) {
+    mo = monthIndex(m[1]) + 1; d = +m[2]; if (m[3]) y = +m[3];
+  } else if ((m = eat(new RegExp('\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+' + MONTH_RE + '\\.?(?:,?\\s*(\\d{4}))?\\b', 'i')))) {
+    d = +m[1]; mo = monthIndex(m[2]) + 1; if (m[3]) y = +m[3];
+  } else if ((m = eat(/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/))) {
+    y = +m[1]; mo = +m[2]; d = +m[3];
+  } else if ((m = eat(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/))) {
+    // Slash dates are a genuine coin flip. US zone present -> month first.
+    const usZone = zone && /^America\//.test(zone);
+    if (usZone) { mo = +m[1]; d = +m[2]; } else { d = +m[1]; mo = +m[2]; }
+    if (m[3]) y = m[3].length === 2 ? 2000 + +m[3] : +m[3];
+    notes.push({ text: 'Read "' + m[0].trim() + '" as ' + (usZone ? 'month/day' : 'day/month') +
+      '. Check the date below.' });
+  } else {
+    // No numbers, but maybe a weekday: "Tuesday at 11am ET".
+    const wd = eat(/\b(sun|mon|tues?|wed(?:nes)?|thur?s?|fri|sat(?:ur)?)(?:day)?\b/i);
+    if (wd) {
+      const k = wd[1].toLowerCase();
+      weekdayWanted = WD3.findIndex(x => x.toLowerCase() === k.slice(0, 3)) ;
+      if (k.startsWith('tue')) weekdayWanted = 2;
+      if (k.startsWith('thu')) weekdayWanted = 4;
+    }
+  }
+  // A leading weekday alongside a real date is just decoration.
+  eat(/\b(sun|mon|tues?|wed(?:nes)?|thur?s?|fri|sat(?:ur)?)(?:day)?\b/i);
+
+  // --- time ---
+  let h = null, mi = 0;
+  if (/\bnoon\b/i.test(work)) { h = 12; mi = 0; eat(/\bnoon\b/i); }
+  else if (/\bmidnight\b/i.test(work)) { h = 0; mi = 0; eat(/\bmidnight\b/i); }
+  else if ((m = eat(/\b(\d{1,2})[:.](\d{2})\s*(a\.?m\.?|p\.?m\.?)?/i))) {
+    h = +m[1]; mi = +m[2];
+    h = applyMeridiem(h, m[3]);
+  } else if ((m = eat(/\b(\d{1,2})\s*(a\.?m\.?|p\.?m\.?)/i))) {
+    h = applyMeridiem(+m[1], m[2]);
+  } else if ((m = eat(/\b(\d{1,2})\b/))) {
+    // Last resort: a bare hour.
+    if (+m[1] <= 23) { h = +m[1]; notes.push({ text: 'Read "' + m[1] + '" as the hour.' }); }
+  }
+
+  function applyMeridiem(hh, mer) {
+    if (!mer) return hh;
+    const pm = /p/i.test(mer);
+    if (pm && hh < 12) return hh + 12;
+    if (!pm && hh === 12) return 0;
+    return hh;
+  }
+
+  if (h === null || h > 23 || mi > 59) return null;
+
+  const effZone = zone || (fixedOffset !== null ? null : state.home);
+  if (!zone && fixedOffset === null) {
+    notes.push({ text: 'No time zone in the text. Assuming ' + labelFor(state.home).city + '.' });
+    zoneLabel = labelFor(state.home).city;
+    zone = state.home;
+  }
+
+  // --- fill in a missing date ---
+  const refZone = effZone || 'UTC';
+  const nowThere = zoneParts(Date.now(), refZone);
+  if (mo === null) {
+    if (weekdayWanted !== null) {
+      // Next occurrence of that weekday, today included if the hour is still ahead.
+      let delta = (weekdayWanted - weekdayOf(nowThere) + 7) % 7;
+      if (delta === 0 && (h * 60 + mi) <= (nowThere.h * 60 + nowThere.mi)) delta = 7;
+      const t = new Date(Date.UTC(nowThere.y, nowThere.mo - 1, nowThere.d + delta));
+      y = t.getUTCFullYear(); mo = t.getUTCMonth() + 1; d = t.getUTCDate();
+      notes.push({ text: 'No date given. Took the next ' + WD[weekdayWanted] + '.' });
+    } else {
+      y = nowThere.y; mo = nowThere.mo; d = nowThere.d;
+      notes.push({ text: 'No date given. Assuming today.' });
+    }
+  } else if (y === null) {
+    // Invitations point forwards. A date well in the past means next year.
+    y = nowThere.y;
+    assumedYear = true;
+    const probe = Date.UTC(y, mo - 1, d);
+    const nowUTC = Date.UTC(nowThere.y, nowThere.mo - 1, nowThere.d);
+    if (probe < nowUTC - 180 * 864e5) y += 1;
+  }
+
+  let out;
+  if (fixedOffset !== null) {
+    out = { ts: Date.UTC(y, mo - 1, d, h, mi, 0) - fixedOffset, skipped: false, ambiguous: false };
+  } else {
+    out = wallToInstant(y, mo, d, h, mi, zone);
+  }
+
+  if (assumedYear) notes.push({ text: 'No year given. Read it as ' + y + '.' });
+
+  // The EST-in-July trap: the sender wrote a standard-time abbreviation but
+  // the date falls in DST (or the reverse). The clock in that city is what
+  // they mean, so resolve by zone and say what we did.
+  if (zone && token && token.dst && token.std) {
+    const real = zoneAbbr(out.ts, zone);
+    const actual = real.toLowerCase();
+    const wrote = token.matched;
+    // Only worth saying when the zone actually reports a named abbreviation.
+    if (real &&
+        ((wrote === token.std && actual === token.dst) ||
+         (wrote === token.dst && actual === token.std))) {
+      notes.push({
+        text: 'The invitation wrote "' + wrote.toUpperCase() + '", but on that date ' +
+              token.label + ' time is ' + real +
+              ' (' + offsetLabel(offsetAt(out.ts, zone)) + '). Used the real one.'
+      });
+    }
+  }
+
+  if (out.skipped) {
+    notes.push({ warn: true, text: pad(h) + ':' + pad(mi) +
+      ' does not exist there that day — the clocks jump forward. Moved to ' +
+      pad(zoneParts(out.ts, zone).h) + ':' + pad(zoneParts(out.ts, zone).mi) + '.' });
+  }
+  if (out.ambiguous) {
+    notes.push({ warn: true, text: pad(h) + ':' + pad(mi) +
+      ' happens twice there that day — the clocks go back. Took the first one.' });
+  }
+
+  return {
+    ts: out.ts, zone, zoneLabel, notes,
+    wall: pad(h) + ':' + pad(mi),
+    wallDate: y + '-' + pad(mo) + '-' + pad(d),
+    skipped: out.skipped, ambiguous: out.ambiguous
+  };
+}
+
+/* =====================================================================
+   Converter UI
+   ===================================================================== */
+
+const invite = document.getElementById('invite');
+const manual = document.getElementById('manual');
+const mDate = document.getElementById('m-date');
+const mTime = document.getElementById('m-time');
+const mZone = document.getElementById('m-zone');
+const result = document.getElementById('result');
+const parseFail = document.getElementById('parse-fail');
+const rEls = {
+  time: document.getElementById('r-time'),
+  date: document.getElementById('r-date'),
+  rel: document.getElementById('r-rel'),
+  echo: document.getElementById('r-echo'),
+  notes: document.getElementById('r-notes')
+};
+
+const EXAMPLES = [
+  'Tuesday, March 3 at 11:00 AM PST',
+  '9am ET',
+  '2:00 PM Pacific Time on 17 March 2027',
+  'noon Eastern',
+  '14:00 CET'
+];
+document.getElementById('examples').innerHTML = EXAMPLES.map(t =>
+  '<button class="btn ex" data-t="' + escapeHtml(t) + '">' + escapeHtml(t) + '</button>').join('');
+document.getElementById('examples').addEventListener('click', e => {
+  const b = e.target.closest('.ex');
+  if (!b) return;
+  invite.value = b.dataset.t;
+  source = 'text';
+  recompute();
+});
+
+function buildZoneSelect() {
+  // Every zone on the wall, plus the usual US suspects, plus home.
+  const zones = [...new Set([
+    'America/Los_Angeles', 'America/Denver', 'America/Chicago', 'America/New_York',
+    'UTC', 'Europe/London', state.home, ...state.cities
+  ])];
+  const ts = Date.now();
+  zones.sort((a, b) => offsetAt(ts, a) - offsetAt(ts, b));
+  mZone.innerHTML = zones.map(z => {
+    const l = labelFor(z);
+    return '<option value="' + escapeHtml(z) + '">' +
+      escapeHtml(l.city) + ' (' + escapeHtml(offsetLabel(offsetAt(ts, z))) + ')</option>';
+  }).join('');
+  mZone.value = 'America/New_York';
+}
+
+let source = 'text';     // 'text' while the paste box drives, 'manual' once a control is touched
+let current = null;      // the resolved result, for Copy and the .ics
+
+function relPhrase(targetTs, hp, tp) {
+  const delta = Math.round(
+    (Date.UTC(tp.y, tp.mo - 1, tp.d) - Date.UTC(hp.y, hp.mo - 1, hp.d)) / 864e5);
+  let day;
+  if (delta === 0) day = 'Today';
+  else if (delta === 1) day = 'Tomorrow';
+  else if (delta === -1) day = 'Yesterday';
+  else if (delta > 1) day = 'In ' + delta + ' days';
+  else day = Math.abs(delta) + ' days ago';
+
+  const h = tp.h;
+  let part;
+  if (h < 6) part = 'the middle of the night';
+  else if (h < 12) part = 'the morning';
+  else if (h < 17) part = 'the afternoon';
+  else if (h < 21) part = 'the evening';
+  else part = 'late evening';
+
+  let s = day + ', in ' + part + '.';
+  if (targetTs < Date.now()) s += ' That has already passed.';
+  return s;
+}
+
+function show(res) {
+  current = res;
+  const hp = zoneParts(res.ts, state.home);
+  const homeName = labelFor(state.home).city;
+
+  rEls.time.textContent = pad(hp.h) + ':' + pad(hp.mi);
+  rEls.date.textContent = WD[weekdayOf(hp)] + ' ' + hp.d + ' ' +
+    MON[hp.mo - 1] + ' ' + hp.y + ' — ' + homeName;
+  rEls.rel.textContent = relPhrase(res.ts, zoneParts(Date.now(), state.home), hp);
+
+  const parts = res.wallDate.split('-').map(Number);
+  const sp = { y: parts[0], mo: parts[1], d: parts[2] };
+  let echo = 'From <strong>' + escapeHtml(res.wall) + '</strong> on ' +
+    WD[weekdayOf(sp)] + ' ' + sp.d + ' ' + MON[sp.mo - 1] + ' ' + sp.y;
+  if (res.zone) {
+    echo += ' in <strong>' + escapeHtml(res.zoneLabel) + '</strong> (' +
+      escapeHtml(zoneTag(res.ts, res.zone)) + ')';
+  } else {
+    echo += ' at <strong>' + escapeHtml(res.zoneLabel) + '</strong>';
+  }
+  rEls.echo.innerHTML = echo + '.';
+
+  rEls.notes.innerHTML = res.notes.map(n =>
+    '<li' + (n.warn ? ' class="warn"' : '') + '>' + escapeHtml(n.text) + '</li>').join('');
+
+  result.hidden = false;
+  parseFail.hidden = true;
+  manual.classList.remove('is-needed');
+}
+
+function recompute() {
+  if (source === 'manual') {
+    if (!mDate.value || !mTime.value) {
+      result.hidden = true;
+      manual.classList.add('is-needed');
+      return;
+    }
+    const [y, mo, d] = mDate.value.split('-').map(Number);
+    const [h, mi] = mTime.value.split(':').map(Number);
+    const zone = mZone.value;
+    const out = wallToInstant(y, mo, d, h, mi, zone);
+    const notes = [];
+    if (out.skipped) notes.push({ warn: true, text: 'That clock time does not exist there that day — the clocks jump forward. Moved to ' + pad(zoneParts(out.ts, zone).h) + ':' + pad(zoneParts(out.ts, zone).mi) + '.' });
+    if (out.ambiguous) notes.push({ warn: true, text: 'That clock time happens twice there that day — the clocks go back. Took the first one.' });
+    show({
+      ts: out.ts, zone, zoneLabel: labelFor(zone).city, notes,
+      wall: pad(h) + ':' + pad(mi), wallDate: mDate.value,
+      skipped: out.skipped, ambiguous: out.ambiguous
+    });
+    return;
+  }
+
+  const text = invite.value;
+  if (!text.trim()) {
+    result.hidden = true;
+    parseFail.hidden = true;
+    manual.classList.remove('is-needed');
+    current = null;
+    return;
+  }
+
+  let res = null;
+  try { res = parseInvite(text); } catch (e) { res = null; }
+
+  if (!res) {
+    result.hidden = true;
+    parseFail.hidden = false;
+    manual.classList.add('is-needed');
+    current = null;
+    return;
+  }
+
+  // Keep the manual controls in sync so correcting a misread is one click.
+  mDate.value = res.wallDate;
+  mTime.value = res.wall;
+  if (res.zone && [...mZone.options].some(o => o.value === res.zone)) mZone.value = res.zone;
+
+  show(res);
+}
+
+let debounce = null;
+invite.addEventListener('input', () => {
+  source = 'text';
+  clearTimeout(debounce);
+  debounce = setTimeout(recompute, 130);
+});
+for (const el of [mDate, mTime, mZone]) {
+  el.addEventListener('change', () => { source = 'manual'; recompute(); });
+}
+
+/* ---------- copy & calendar ---------- */
+
+document.getElementById('copy-btn').addEventListener('click', async (e) => {
+  if (!current) return;
+  const hp = zoneParts(current.ts, state.home);
+  const homeName = labelFor(state.home).city;
+  const txt = pad(hp.h) + ':' + pad(hp.mi) + ' ' + homeName + ' time, ' +
+    WD[weekdayOf(hp)] + ' ' + hp.d + ' ' + MON[hp.mo - 1] + ' ' + hp.y +
+    ' (from ' + current.wall + ' ' + current.zoneLabel + ')';
+  const btn = e.currentTarget;
+  try {
+    await navigator.clipboard.writeText(txt);
+    btn.textContent = 'Copied';
+  } catch (err) {
+    btn.textContent = 'Press ⌘C';
+  }
+  setTimeout(() => { btn.textContent = 'Copy'; }, 1600);
+});
+
+function icsEsc(s) {
+  return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;')
+    .replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+}
+function icsFold(line) {
+  // RFC 5545 caps a line at 75 octets; continuations start with a space.
+  const out = [];
+  let s = line;
+  while (s.length > 73) { out.push(s.slice(0, 73)); s = ' ' + s.slice(73); }
+  out.push(s);
+  return out.join('\r\n');
+}
+function icsStamp(ts) {
+  const p = zoneParts(ts, 'UTC');
+  return '' + p.y + pad(p.mo) + pad(p.d) + 'T' + pad(p.h) + pad(p.mi) + pad(p.s) + 'Z';
+}
+
+document.getElementById('ics-btn').addEventListener('click', () => {
+  if (!current) return;
+  const raw = invite.value.trim().replace(/\s+/g, ' ');
+  const summary = raw ? raw.slice(0, 70) : 'Converted time';
+  const lines = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0',
+    'PRODID:-//svendoldenburg.com//world-clock//EN', 'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    'UID:' + Date.now().toString(36) + '-' +
+      Math.random().toString(36).slice(2, 10) + '@svendoldenburg.com',
+    'DTSTAMP:' + icsStamp(Date.now()),
+    'DTSTART:' + icsStamp(current.ts),
+    'DTEND:' + icsStamp(current.ts + 3600000),
+    icsFold('SUMMARY:' + icsEsc(summary)),
+    icsFold('DESCRIPTION:' + icsEsc(
+      'Source: ' + current.wall + ' ' + current.zoneLabel +
+      ' on ' + current.wallDate + '. Converted by svendoldenburg.com/clock')),
+    'END:VEVENT', 'END:VCALENDAR'
+  ];
+  const blob = new Blob([lines.join('\r\n') + '\r\n'], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'invitation-' + current.wallDate + '.ics';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+});
+
+/* =====================================================================
+   Boot
+   ===================================================================== */
+
+buildGrid();
+buildZoneSelect();
+startTicking();
+
+// Autofocus the paste box on a real keyboard only. On touch it would throw
+// the keyboard up the moment the page opens.
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) invite.focus();
+</script>
+
+</body>
+</html>
